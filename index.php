@@ -47,6 +47,7 @@
                                 }
                                 $displayName = implode(" ", $displayNameWords);
                                 
+                                //Aaaaand output it.
                                 ?>
                                 <li>
                                     <a href="<?php echo $item; ?>/"><?php echo $displayName; ?></a>

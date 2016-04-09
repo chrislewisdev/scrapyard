@@ -1,0 +1,44 @@
+body
+{
+    margin-bottom:3em;
+}
+
+.category
+{
+    width:15%;
+    margin-left:.5%;
+    margin-right:.5%;
+}
+
+@media (max-width: 900px) {.category
+{
+    width:32%;
+}}
+
+@media (max-width: 400px) {.category
+{
+        width:49%;
+}}
+
+.result
+{
+    display:inline-block;
+    height:100px;
+    width:30.8%;
+    margin-left:.5%;
+    margin-right:.5%;
+    margin-bottom:7px;
+    
+    border:1px solid #bbb;
+    border-radius:4px;
+    
+    padding-top:40px;
+    
+    text-align:center;
+    font-size:2em;
+}
+
+@media (max-width: 900px) {.result
+{
+        width:48%;
+}}

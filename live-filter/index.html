@@ -1,7 +1,7 @@
 <!doctype html>
-<html>
+<html ng-app="filter">
     <head>
-        <title>Scrapyard: Sample Page</title>
+        <title>Scrapyard: Live Filter</title>
         
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,24 +14,39 @@
         <link rel="stylesheet" href="../_css/skeleton/normalize.css">
         <link rel="stylesheet" href="../_css/skeleton/skeleton.css">
         <link rel="stylesheet" href="../_css/style.css">
+        <link rel="stylesheet" href="style.css">
+        
+        <script src="../_js/angular.min.js"></script>
+        <script src="filter.js"></script>
     </head>
     <body>
         <div class="header">
             <div class="container">
                 <div class="row">
                     <div class="twelve columns">
-                        <h1>Sample</h1>
+                        <h1>Live Filter Demo</h1>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="body container">
+        <div class="body container" ng-controller="FilterController as filter">
             <div class="row">
                 <div class="twelve columns">
                     <p>
-                        This is a sample page that exists in the scrapyard. 
-                        It does nothing except provide a folder that the main page can link to without requiring any effort to make.
+                        The power of Angular compels you to select a category below and see the results filtered right before your eyes!
                     </p>
+                </div>
+            </div>
+            
+            <div>
+                <button ng-repeat="category in filter.categories" class="category button{{filter.isSelected(category)}}" ng-click="filter.toggleSelection(category)">
+                    {{category}}
+                </button>
+            </div>
+            
+            <div>
+                <div ng-repeat="result in filter.results track by $index" class="result">
+                    {{result}}
                 </div>
             </div>
         </div>
