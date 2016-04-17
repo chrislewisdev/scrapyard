@@ -1,0 +1,40 @@
+<!doctype html>
+<html ng-app="games-crud">
+    <head>
+        <title>Scrapyard: Games CRUD</title>
+        
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#5e2721" />
+        
+        <link rel="shortcut icon" type="image/png" href="../_images/favicon.png">
+        <link rel="shortcut icon" type="image/png" href="http://scrap.chrislewsidev.com/_images/favicon.png">
+        
+        <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="../_css/skeleton/normalize.css">
+        <link rel="stylesheet" href="../_css/skeleton/skeleton.css">
+        <link rel="stylesheet" href="../_css/style.css">
+        <link rel="stylesheet" href="style.css">
+        
+        <script src="../_js/angular.min.js"></script>
+        <script src="../_js/angular-route.min.js"></script>
+        <script src="games-crud.js"></script>
+    </head>
+    <body>
+        <div class="header">
+            <div class="container">
+                <div class="row">
+                    <div class="twelve columns">
+                        <h1>Games CRUD Demo</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="body container">
+            <div>
+                <p>Because everyone needs a CRUD app for their favourite games.</p>
+            </div>
+            <div ng-view></div>
+        </div>
+    </body>
+</html>
