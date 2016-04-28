@@ -1,3 +1,24 @@
 <h2>Edit</h2>
-<a href="#/"><button>Save</button></a>
-<a href="#/"><button>Cancel</button></a>
+<form name="edit-game">
+    <div class="field">
+        <label for="game-name">Name:</label>
+        <input type="text" name="game-name" ng-model="editor.game.name" required />
+    </div>
+    
+    <div class="field">
+        <label for="game-genre">Genre:</label>
+        <select name="game-genre" ng-model="editor.game.genre">
+            <option value="FPS">FPS</option>
+            <option value="Horror">Horror</option>
+            <option value="Racing">Racing</option>
+        </select>
+    </div>
+    
+    <div class="field">
+        <label for="game-score">Metacritic Score:</label>
+        <input type="number" min="0" max="100" name="game-score" ng-model="editor.game.score" required />
+    </div>
+    
+    <button ng-click="editor.save()" ng-disabled="edit-game.$invalid">Save</button>
+    <a href="#/"><button>Cancel</button></a>
+</form>
