@@ -24,3 +24,8 @@ td:first-child, td:last-child, th:first-child, th:last-child
 {
     border-color:red;
 }
+
+@media (max-width: 600px) {td:nth-child(2), td:nth-child(3), th:nth-child(2), th:nth-child(3)
+{
+    display:none;
+}}
