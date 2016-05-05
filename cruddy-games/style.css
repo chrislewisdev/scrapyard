@@ -29,3 +29,8 @@ td:first-child, td:last-child, th:first-child, th:last-child
 {
     display:none;
 }}
+
+table button
+{
+    padding:0 15px;
+}
