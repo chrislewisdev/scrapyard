@@ -4,3 +4,23 @@ label
     min-width:140px;
     text-align:left;
 }
+
+table
+{
+    width:100%;
+}
+
+thead
+{
+    background-color:#eeeeee;
+}
+
+td:first-child, td:last-child, th:first-child, th:last-child
+{
+    padding: 12px 15px;
+}
+
+.error input, .error select
+{
+    border-color:red;
+}

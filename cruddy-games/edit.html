@@ -1,13 +1,14 @@
 <h2>Edit</h2>
-<form name="edit-game">
-    <div class="field">
-        <label for="game-name">Name:</label>
-        <input type="text" name="game-name" ng-model="editor.game.name" required />
+<form name="editgame">
+    <div class="field" ng-class="{error: editgame.name.$invalid && !editgame.name.$pristine}">
+        <label for="name">Name:</label>
+        <input type="text" name="name" ng-model="editor.game.name" required />
     </div>
     
-    <div class="field">
-        <label for="game-genre">Genre:</label>
-        <select name="game-genre" ng-model="editor.game.genre">
+    <div class="field" ng-class="{error: editgame.genre.$invalid && !editgame.genre.$pristine}">
+        <label for="genre">Genre:</label>
+        <select name="genre" ng-model="editor.game.genre" required>
+            <option value="">Select</option>            
             <option value="FPS">FPS</option>
             <option value="Horror">Horror</option>
             <option value="Racing">Racing</option>
@@ -16,9 +17,9 @@
     
     <div class="field">
         <label for="game-score">Metacritic Score:</label>
-        <input type="number" min="0" max="100" name="game-score" ng-model="editor.game.score" required />
+        <input type="number" min="0" max="100" name="game-score" ng-model="editor.game.score" />
     </div>
     
-    <button ng-click="editor.save()" ng-disabled="edit-game.$invalid">Save</button>
+    <button ng-click="editor.save()" ng-disabled="editgame.$invalid">Save</button>
     <a href="#/"><button>Cancel</button></a>
 </form>

@@ -4,8 +4,19 @@
 <div>
     <a href="#/new"><button>Add Your Own!</button></a>
     <table>
+        <thead>
+            <th>Name</th>
+            <th>Genre</th>
+            <th>Metacritic Score</th>
+            <th></th>
+            <th></th>
+        </thead>
         <tr ng-repeat="item in list.model">
             <td>{{item.name}}</td>
+            <td>{{item.genre}}</td>
+            <td>{{item.score}}</td>
+            <td><a href="#/edit/{{$index}}"><button>Edit</button></a></td>
+            <td><button ng-click="list.delete($index)">Delete</button></td>
         </tr>
     </table>
 </div>
