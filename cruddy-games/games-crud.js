@@ -64,11 +64,6 @@ angular.module('games-crud', ['ngRoute'])
         var self = this;
         
         self.model = model;
-        
-        self.delete = function(index)
-        {
-            model.splice(index, 1);
-        }
     })
     //The EditController, used when editing or creating new objects
     .controller('EditController', function($location, $routeParams, model)
@@ -114,4 +109,10 @@ angular.module('games-crud', ['ngRoute'])
             }
             $location.path('/');
         };
+        
+        self.delete = function()
+        {
+            model.splice(model.indexOf(self.game), 1);
+            $location.path('/');
+        }
     });

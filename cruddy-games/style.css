@@ -5,32 +5,47 @@ label
     text-align:left;
 }
 
-table
-{
-    width:100%;
-}
-
-thead
-{
-    background-color:#eeeeee;
-}
-
-td:first-child, td:last-child, th:first-child, th:last-child
-{
-    padding: 12px 15px;
-}
-
 .error input, .error select
 {
     border-color:red;
 }
 
-@media (max-width: 600px) {td:nth-child(2), td:nth-child(3), th:nth-child(2), th:nth-child(3)
+.table
 {
-    display:none;
-}}
+    display:table;
+    width:100%;
+}
+.tr
+{
+    display:table-row;
+}
+.td
+{
+    display:table-cell;
+}
+.thead
+{
+    display:table-header-group;
+    background-color:#eeeeee;
+    font-weight:bold;
+}
+.th, .td 
+{
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #E1E1E1; 
+}
 
-table button
+a.tr
 {
-    padding:0 15px;
+    text-decoration:none;
+}
+a.tr:hover, a.tr:focus, a.tr:active
+{
+    background-color:#eee;
+}
+
+.delete-button
+{
+    border-color:red;
 }
