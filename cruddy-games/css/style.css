@@ -62,10 +62,20 @@ a.tr:hover, a.tr:focus, a.tr:active
     background-color:#eee;
 }
 
+button
+{
+    min-width:110px;
+    background-color:#eee;
+}
+.button-primary
+{
+    background-color:#7BAFBF !important;
+}
+
 .delete-button
 {
     border-color:red;
-    background-color:#CC0000;
+    background-color:#990000;
     color:white;
     display:block;
     margin-top:1em;
@@ -77,9 +87,10 @@ a.tr:hover, a.tr:focus, a.tr:active
 @media(max-width:400px) {
     .save-button, .cancel-button
     {
-        width:49.25%;
+        display:block;
+        width:100%;
     }
-    .delete-button
+    .delete-button, .add-button
     {
         width:100%;
     }

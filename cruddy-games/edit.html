@@ -21,7 +21,7 @@
         <input type="number" min="0" max="100" name="game-score" ng-model="editor.game.score" />
     </div>
     
-    <button class="save-button" ng-click="editor.save()" ng-disabled="editgame.$invalid">Save</button>
+    <button class="save-button button-primary" ng-click="editor.save()" ng-disabled="editgame.$invalid">Save</button>
     <button class="cancel-button" ng-click="editor.cancel()">Cancel</button>
     <button ng-if="!editor.isNew" class="delete-button" ng-click="editor.delete()">Delete</button>
 </form>
