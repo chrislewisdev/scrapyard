@@ -1,4 +1,4 @@
-angular.module('games-crud', ['ngRoute'])
+angular.module('games-crud', ['ngRoute', 'ngDialog'])
     //Define the Model service, which will contain our data that persists across controllers.
     .service('Model', function()
     {
@@ -66,7 +66,7 @@ angular.module('games-crud', ['ngRoute'])
         self.model = model;
     })
     //The EditController, used when editing or creating new objects
-    .controller('EditController', function($location, $routeParams, model)
+    .controller('EditController', function($location, $routeParams, ngDialog, model)
     {
         var self = this;
         
@@ -112,7 +112,37 @@ angular.module('games-crud', ['ngRoute'])
         
         self.delete = function()
         {
-            model.splice(model.indexOf(self.game), 1);
-            $location.path('/');
+            self.confirmAction('Delete', function()
+            {
+                model.splice(model.indexOf(self.game), 1);
+                $location.path('/');
+            });
+        }
+        
+        self.cancel = function()
+        {
+            self.confirmAction('Cancel', function()
+            {
+                $location.path('/');
+            });
+        }
+        
+        //Opens a Yes/No dialog to perform an action, and if they click Yes, performs it.
+        self.confirmAction = function(name, action)
+        {
+            return ngDialog.open(
+            {
+                template:'are-you-sure.html', 
+                className:'ngdialog-theme-default',
+                data:{action:name}
+            })
+            .closePromise.then(function(results)
+            {
+                //If they selected Yes, perform the action.
+                if (results.value === true)
+                {
+                    action();
+                }
+            });
         }
     });

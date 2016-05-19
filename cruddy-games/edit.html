@@ -1,4 +1,5 @@
-<h2>Edit</h2>
+<h2 ng-if="!editor.isNew">Edit Game</h2>
+<h2 ng-if="editor.isNew">New Game</h2>
 <form name="editgame">
     <div class="field" ng-class="{error: editgame.name.$invalid && !editgame.name.$pristine}">
         <label for="name">Name:</label>
@@ -21,6 +22,6 @@
     </div>
     
     <button class="save-button" ng-click="editor.save()" ng-disabled="editgame.$invalid">Save</button>
-    <a class="cancel-button" href="#/"><button>Cancel</button></a>
+    <button class="cancel-button" ng-click="editor.cancel()">Cancel</button>
     <button ng-if="!editor.isNew" class="delete-button" ng-click="editor.delete()">Delete</button>
 </form>

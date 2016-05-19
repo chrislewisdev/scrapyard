@@ -3,14 +3,11 @@ body
     padding-bottom:2em;
 }
 
-@media (max-width:400px)
+@media (max-width:400px) { .header
 {
-    .header
-    {
-        padding-top:.5em;
-        margin-bottom:1em;
-    }
-}
+    padding-top:.5em;
+    margin-bottom:1em;
+}}
 
 label
 {
@@ -23,6 +20,12 @@ label
 {
     border-color:red;
 }
+
+@media (max-width:400px) { input, select
+{
+    display:block;
+    width:100%;
+}}
 
 .table
 {
@@ -62,4 +65,22 @@ a.tr:hover, a.tr:focus, a.tr:active
 .delete-button
 {
     border-color:red;
+    background-color:#CC0000;
+    color:white;
+    display:block;
+    margin-top:1em;
+}
+.delete-button:hover
+{
+    color:white;
+}
+@media(max-width:400px) {
+    .save-button, .cancel-button
+    {
+        width:49.25%;
+    }
+    .delete-button
+    {
+        width:100%;
+    }
 }
