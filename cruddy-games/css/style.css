@@ -70,14 +70,20 @@ button
 .button-primary
 {
     background-color:#7BAFBF !important;
+    border-color:#75A6B5 !important;
+}
+button[disabled]
+{
+    background-color:#eee !important;
+    color:#bbb;
+    border-color:#bbb !important;
 }
 
 .delete-button
 {
-    border-color:red;
+    border-color:#CC0000;
     background-color:#990000;
     color:white;
-    display:block;
     margin-top:1em;
 }
 .delete-button:hover
@@ -93,5 +99,6 @@ button
     .delete-button, .add-button
     {
         width:100%;
+        display:block;
     }
 }

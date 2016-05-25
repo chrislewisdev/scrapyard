@@ -121,10 +121,7 @@ angular.module('games-crud', ['ngRoute', 'ngDialog'])
         
         self.cancel = function()
         {
-            self.confirmAction('Cancel', function()
-            {
-                $location.path('/');
-            });
+            $location.path('/');
         }
         
         //Opens a Yes/No dialog to perform an action, and if they click Yes, performs it.
