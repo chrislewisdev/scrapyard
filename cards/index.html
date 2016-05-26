@@ -1,0 +1,57 @@
+<!doctype html>
+<html ng-app="cards">
+    <head>
+        <title>Scrapyard: Sample Page</title>
+        
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#5e2721" />
+        
+        <link rel="shortcut icon" type="image/png" href="../_images/favicon.png">
+        <link rel="shortcut icon" type="image/png" href="http://scrap.chrislewsidev.com/_images/favicon.png">
+        
+        <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="../_css/skeleton/normalize.css">
+        <link rel="stylesheet" href="../_css/skeleton/skeleton.css">
+        <link rel="stylesheet" href="../_css/style.css">
+        <link rel="stylesheet" href="./css/style.css">
+        
+        <script src="../_js/angular.min.js"></script>
+        <script src="./js/cards.js"></script>
+    </head>
+    <body ng-controller="TempController as temp">
+        <div class="header">
+            <div class="container">
+                <div class="row">
+                    <div class="twelve columns">
+                        <h1>Cards</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="body container">
+            <div class="row">
+                <div class="twelve columns">
+                    <p>
+                        For all your Hearthstone-loving, card-browsing needs.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="twelve columns">
+                    <button class="class-button" ng-class="temp.getButtonClass(class)" ng-click="temp.setClass(class)" ng-repeat="class in temp.classes">{{class}}</button>
+                </div>
+            </div>
+            
+            <div class="row card-area">
+                <div class="twelve columns">
+                    <div class="card" ng-repeat="card in temp.model | filter: { type: '!hero' }">
+                        <img src="{{card.img}}" />
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </body>
+</html>

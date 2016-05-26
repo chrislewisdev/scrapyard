@@ -1,0 +1,40 @@
+.card
+{
+    display:inline-block;
+    width:25%;
+    /*All the card images have whitespace around the top...*/
+    margin-top:-40px;
+}
+
+.card img
+{
+    max-width:100%;
+}
+
+.class-button
+{
+    width:20%;
+}
+
+@media (max-width: 800px) {
+    .card
+    {
+        width:33%;
+    }
+}
+
+@media (max-width: 600px) {
+    .card
+    {
+        width:50%;
+    }
+    .class-button
+    {
+        width:50%;
+    }
+}
+
+.card-area
+{
+    margin-top:20px;
+}
