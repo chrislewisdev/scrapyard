@@ -1,7 +1,7 @@
 <!doctype html>
 <html ng-app="cards">
     <head>
-        <title>Scrapyard: Sample Page</title>
+        <title>Hearthstone Card Browser</title>
         
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,12 +19,12 @@
         <script src="../_js/angular.min.js"></script>
         <script src="./js/cards.js"></script>
     </head>
-    <body ng-controller="TempController as temp">
+    <body ng-controller="BrowserController as browser">
         <div class="header">
             <div class="container">
                 <div class="row">
                     <div class="twelve columns">
-                        <h1>Cards</h1>
+                        <h1>Hearthstone Card Browser</h1>
                     </div>
                 </div>
             </div>
@@ -32,25 +32,25 @@
         <div class="body container">
             <div class="row">
                 <div class="twelve columns">
-                    <p>
-                        For all your Hearthstone-loving, card-browsing needs.
-                    </p>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="twelve columns">
-                    <button class="class-button" ng-class="temp.getButtonClass(class)" ng-click="temp.setClass(class)" ng-repeat="class in temp.classes">{{class}}</button>
+                    <button class="class-button" ng-class="browser.getButtonClass(class)" 
+                        ng-click="browser.setClass(class)" 
+                        ng-repeat="class in browser.collection.classes">
+                        {{class}}
+                    </button>
                 </div>
             </div>
             
             <div class="row card-area">
                 <div class="twelve columns">
-                    <div class="card" ng-repeat="card in temp.model | filter: { type: '!hero' }">
+                    <div class="card" ng-repeat="card in browser.collection.cards | filter: { playerClass: browser.currentClass, type: '!hero' } | limitTo: 12">
                         <img src="{{card.img}}" />
                     </div>
                 </div>
             </div>
+            
+            <!--<div class="pagination">
+                <button>Previous</button><button>Next</button>
+            </div>-->
             
         </div>
     </body>

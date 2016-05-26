@@ -38,3 +38,8 @@
 {
     margin-top:20px;
 }
+
+.pagination button
+{
+    width:50%;
+}
