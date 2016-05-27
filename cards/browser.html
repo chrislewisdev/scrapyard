@@ -1,0 +1,26 @@
+<div class="body container">
+    <div class="row">
+        <div class="twelve columns">
+            <button class="class-button" ng-class="browser.getButtonClass(class)" 
+                ng-click="browser.setClass(class)" 
+                ng-repeat="class in browser.collection.classes">
+                {{class}}
+            </button>
+        </div>
+    </div>
+    
+    <div class="row card-area">
+        <div class="twelve columns">
+            <div class="card" ng-repeat="card in browser.collection.cards | 
+                                            filter: { playerClass: browser.currentClass, type: '!hero' } | 
+                                            startFrom: browser.currentPage * browser.pageSize |
+                                            limitTo: browser.pageSize">
+                <img src="{{card.img}}" />
+            </div>
+        </div>
+    </div>
+    
+    <div class="pagination">
+        <button ng-click="browser.previousPage()">&lt;</button><button ng-click="browser.nextPage()">&gt;</button>
+    </div>
+</div>

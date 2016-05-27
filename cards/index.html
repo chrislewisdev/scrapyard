@@ -8,7 +8,7 @@
         <meta name="theme-color" content="#5e2721" />
         
         <link rel="shortcut icon" type="image/png" href="../_images/favicon.png">
-        <link rel="shortcut icon" type="image/png" href="http://scrap.chrislewsidev.com/_images/favicon.png">
+        <link rel="shortcut icon" type="image/png" href="http://scrap.chrislewisdev.com/_images/favicon.png">
         
         <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="../_css/skeleton/normalize.css">
@@ -16,10 +16,11 @@
         <link rel="stylesheet" href="../_css/style.css">
         <link rel="stylesheet" href="./css/style.css">
         
-        <script src="../_js/angular.min.js"></script>
+        <script src="../_js/angular.js"></script>
+        <script src="../_js/angular-route.min.js"></script>
         <script src="./js/cards.js"></script>
     </head>
-    <body ng-controller="BrowserController as browser">
+    <body>
         <div class="header">
             <div class="container">
                 <div class="row">
@@ -29,29 +30,7 @@
                 </div>
             </div>
         </div>
-        <div class="body container">
-            <div class="row">
-                <div class="twelve columns">
-                    <button class="class-button" ng-class="browser.getButtonClass(class)" 
-                        ng-click="browser.setClass(class)" 
-                        ng-repeat="class in browser.collection.classes">
-                        {{class}}
-                    </button>
-                </div>
-            </div>
-            
-            <div class="row card-area">
-                <div class="twelve columns">
-                    <div class="card" ng-repeat="card in browser.collection.cards | filter: { playerClass: browser.currentClass, type: '!hero' } | limitTo: 12">
-                        <img src="{{card.img}}" />
-                    </div>
-                </div>
-            </div>
-            
-            <!--<div class="pagination">
-                <button>Previous</button><button>Next</button>
-            </div>-->
-            
-        </div>
+        
+        <div ng-view></div>
     </body>
 </html>

@@ -1,4 +1,4 @@
-angular.module('cards', [])
+angular.module('cards', ['ngRoute'])
     .service('Collection', function($http, $q)
     {
         var self = this;
@@ -54,34 +54,39 @@ angular.module('cards', [])
             console.log('Unable to initialise :(');
         });
     })
-    .controller('BrowserController', function($http, Collection)
+    .config(function($routeProvider)
+    {
+        $routeProvider
+            .when('/:class/:pageNumber',
+            {
+                controller:'BrowserController as browser',
+                templateUrl:'browser.html',
+            })
+            //In THEORY, we can't know if Druid is a real class until the API returns back. But meh.
+            .otherwise({redirectTo:'/Druid/0'});
+    })
+    .controller('BrowserController', function($routeParams, $location, Collection)
     {
         var self = this;
         
         self.collection = Collection;
         
         //Our currently selected class
-        self.currentClass = null;
+        self.currentClass = $routeParams.class;
+        //Current page (starts at 0)
+        self.currentPage = +$routeParams.pageNumber;
+        //No. of cards to display on each page
+        self.pageSize = 12;
         
-        //Wait for the collection to initialise if necessary before we do.
-        if (!self.collection.isInitialised)
-        {
-            self.collection.deferredLoading.promise.then(function()
-            {
-                self.initialise();
-            });
-        }
-        else
-        {
-            self.initialise();
-        }
+        //Sanity-check our page no.
+        if (self.currentPage < 0) self.currentPage = 0;
         
         /**
-         * Initialises our current class selection to the first available class.
+         * Gets the app path suitable for displaying the given class at the given page.
          */
-        self.initialise = function()
+        self.getPath = function(forClass, page)
         {
-            self.currentClass = self.collection.classes[0];
+            return '/' + forClass + '/' + page;
         }
         
         /**
@@ -89,7 +94,7 @@ angular.module('cards', [])
          */
         self.setClass = function(toClass)
         {
-            self.currentClass = toClass;
+            $location.path(self.getPath(toClass, 0));
         }
         
         /**
@@ -106,4 +111,27 @@ angular.module('cards', [])
                 return '';
             }
         }
+        
+        /**
+         * Advances our view to the next page.
+         */
+        self.nextPage = function()
+        {
+            $location.path(self.getPath(self.currentClass, self.currentPage + 1));
+        }
+        
+        /**
+         * Sends our view back to the previous page.
+         */
+        self.previousPage = function()
+        {
+            $location.path(self.getPath(self.currentClass, self.currentPage - 1));
+        }
+    })
+    .filter('startFrom', function()
+    {
+        return function (input, start)
+        {
+            return input.slice(start);
+        };
     });
