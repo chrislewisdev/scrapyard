@@ -8,50 +8,51 @@ angular.module('cards', ['ngRoute'])
         //Storage for all currently displayed cards
         self.cards = [];
         //Storage for all valid classes
-        self.classes = [];
-        //True once we've loaded up our base information
-        self.isInitialised = false;
-        
+        self.classes = 
+        [
+            'Druid',
+            'Hunter',
+            'Mage',
+            'Paladin',
+            'Priest',
+            'Rogue',
+            'Shaman',
+            'Warlock',
+            'Warrior',
+            'Neutral'
+        ];
+        //Promise that is resolved once we've finished loading our base information
         self.deferredLoading = $q.defer();
         
-        //Initialise our list of classes
-        $http.get('https://omgvamp-hearthstone-v1.p.mashape.com/info',
-        { headers: self.requestHeaders } )
-        .then(function success(response)
+        //For each class, create a promise that will be resolved when it has finished loading.
+        self.loadingSignals = {};
+        self.classes.forEach(function(cardClass)
         {
-            //TODO: Any validation?
-            
-            self.classes = response.data.classes;
-            
-            //The 10th class is Dream, stupidly, while Neutral is not a class- so just shove it in there
-            self.classes[self.classes.length - 1] = 'Neutral';
-            
-            self.deferredLoading.resolve();
-            
-            //Retrieve cards separately for each class (so we get results back sooner)
-            self.classes.forEach(function(cardClass)
+            self.loadingSignals[cardClass] = $q.defer();
+        });
+        
+        //Retrieve cards separately for each class (so we get results back sooner)
+        self.classes.forEach(function(cardClass)
+        {
+            $http.get('https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/' + cardClass + '?collectible=1',
+            { headers: self.requestHeaders } )
+            .then(function success(response)
             {
-                $http.get('https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/' + cardClass + '?collectible=1',
-                { headers: self.requestHeaders } )
-                .then(function success(response)
+                //TODO: Any validation?
+                response.data.forEach(function(card)
                 {
-                    //TODO: Any validation?
-                    response.data.forEach(function(card)
-                    {
-                        //Neutral cards have no playerClass property, so set it explicitly for consistency
-                        card.playerClass = cardClass;
-                        self.cards.push(card);
-                    });
-                },
-                function error(response)
-                {
-                    console.log('Unable to retrieve cards for ' + cardClass);
+                    //Neutral cards have no playerClass property, so set it explicitly for consistency
+                    card.playerClass = cardClass;
+                    self.cards.push(card);
                 });
+                
+                //Resolve our promise for this class
+                self.loadingSignals[cardClass].resolve();
+            },
+            function error(response)
+            {
+                console.log('Unable to retrieve cards for ' + cardClass);
             });
-        },
-        function error(response)
-        {
-            console.log('Unable to initialise :(');
         });
     })
     .config(function($routeProvider)
@@ -65,7 +66,7 @@ angular.module('cards', ['ngRoute'])
             //In THEORY, we can't know if Druid is a real class until the API returns back. But meh.
             .otherwise({redirectTo:'/Druid/0'});
     })
-    .controller('BrowserController', function($routeParams, $location, Collection)
+    .controller('BrowserController', function($routeParams, $location, Collection, filterFilter)
     {
         var self = this;
         
@@ -77,9 +78,6 @@ angular.module('cards', ['ngRoute'])
         self.currentPage = +$routeParams.pageNumber;
         //No. of cards to display on each page
         self.pageSize = 12;
-        
-        //Sanity-check our page no.
-        if (self.currentPage < 0) self.currentPage = 0;
         
         /**
          * Gets the app path suitable for displaying the given class at the given page.
@@ -126,6 +124,33 @@ angular.module('cards', ['ngRoute'])
         self.previousPage = function()
         {
             $location.path(self.getPath(self.currentClass, self.currentPage - 1));
+        }
+        
+        /**
+         * Initialises our controller once the current class is loaded.
+         */
+        self.initialise = function()
+        {
+            //Sanity-check our page number.
+            if (self.currentPage < 0) self.currentPage = 0;
+            var maxPage = Math.floor(filterFilter(self.collection.cards, { playerClass: self.currentClass, type: '!hero' }).length / self.pageSize);
+            if (self.currentPage > maxPage) self.currentPage = maxPage;
+            
+            //Have we had to constrain our current page number? Redirect so the path reflects what we're displaying.
+            if (self.currentPage != $routeParams.pageNumber)
+            {
+                $location.path(self.getPath(self.currentClass, self.currentPage));
+            }
+        }
+        
+        //Make sure we're looking for a valid class before we initialise.
+        if (self.collection.classes.indexOf(self.currentClass) === -1)
+        {
+            $location.path(self.collection.classes[0], 0);  //Redirect to something sensible.
+        }
+        else
+        {
+            self.collection.loadingSignals[self.currentClass].promise.then(self.initialise);
         }
     })
     .filter('startFrom', function()
