@@ -21,7 +21,7 @@
 }
 
 /* 3 columns on smaller screens*/
-@media (max-width: 550px) { .card
+@media (max-width: 750px) { .card
 {
     width:33%;
 }}
