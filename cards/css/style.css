@@ -21,12 +21,12 @@
 }
 
 /* 3 columns on smaller screens*/
-@media (max-width: 800px) { .card
+@media (max-width: 550px) { .card
 {
     width:33%;
 }}
 /* 2 columns on phone screens */
-@media (max-width: 600px) { .card
+@media (max-width: 400px) { .card
 {
     width:50%;
 }}
