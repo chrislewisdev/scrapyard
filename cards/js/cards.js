@@ -51,7 +51,7 @@ angular.module('cards', ['ngRoute'])
             },
             function error(response)
             {
-                console.log('Unable to retrieve cards for ' + cardClass);
+                self.loadingSignals[cardClass].reject();
             });
         });
     })
@@ -82,6 +82,8 @@ angular.module('cards', ['ngRoute'])
         self.maxPage = 0;
         //Set to true once initialisation is complete.
         self.initialised = false;
+        //Set to true if there was a loading error.
+        self.error = false;
         
         /**
          * Gets the app path suitable for displaying the given class at the given page.
@@ -159,6 +161,15 @@ angular.module('cards', ['ngRoute'])
             self.initialised = true;
         }
         
+        /**
+         * Alternate initialisation if we were unable to load up our data properly.
+         */
+        self.onError = function()
+        {
+            self.initialised = true;
+            self.error = true;
+        }
+        
         //Make sure we're looking for a valid class before we initialise.
         if (self.collection.classes.indexOf(self.currentClass) === -1)
         {
@@ -166,7 +177,7 @@ angular.module('cards', ['ngRoute'])
         }
         else
         {
-            self.collection.loadingSignals[self.currentClass].promise.then(self.initialise);
+            self.collection.loadingSignals[self.currentClass].promise.then(self.initialise, self.onError);
         }
     })
     .filter('startFrom', function()
