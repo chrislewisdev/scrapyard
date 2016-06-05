@@ -80,6 +80,8 @@ angular.module('cards', ['ngRoute'])
         self.pageSize = 12;
         //Storage for the max no. of pages for our current search results.
         self.maxPage = 0;
+        //Set to true once initialisation is complete.
+        self.initialised = false;
         
         /**
          * Gets the app path suitable for displaying the given class at the given page.
@@ -98,18 +100,11 @@ angular.module('cards', ['ngRoute'])
         }
         
         /**
-         * Returns the appropriate CSS class for a class-button if it's selected; blank otherwise.
+         * Returns true if the given class is our current class; false otherwise.
          */
-        self.getButtonClass = function(ofClass)
+        self.isCurrentClass = function(anyClass)
         {
-            if (ofClass == self.currentClass)
-            {
-                return 'button-primary';
-            }
-            else
-            {
-                return '';
-            }
+            return (anyClass == self.currentClass);
         }
         
         /**
@@ -117,7 +112,7 @@ angular.module('cards', ['ngRoute'])
          */
         self.canPageForwards = function()
         {
-            return self.currentPage < self.maxPage;
+            return self.initialised && self.currentPage < self.maxPage;
         }
         
         /**
@@ -125,7 +120,7 @@ angular.module('cards', ['ngRoute'])
          */
         self.canPageBackwards = function()
         {
-            return self.currentPage > 0;
+            return self.initialised && self.currentPage > 0;
         }
         
         /**
@@ -160,6 +155,8 @@ angular.module('cards', ['ngRoute'])
             {
                 $location.path(self.getPath(self.currentClass, self.currentPage));
             }
+            
+            self.initialised = true;
         }
         
         //Make sure we're looking for a valid class before we initialise.

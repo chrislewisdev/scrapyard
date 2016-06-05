@@ -1,7 +1,8 @@
 <div class="body container">
     <div class="row">
         <div class="twelve columns">
-            <button class="class-button" ng-class="browser.getButtonClass(class)" 
+            <button class="class-button" 
+                ng-class="{ 'button-primary' : browser.isCurrentClass(class) }" 
                 ng-click="browser.setClass(class)" 
                 ng-repeat="class in browser.collection.classes">
                 {{class}}

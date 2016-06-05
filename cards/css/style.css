@@ -2,13 +2,46 @@
 {
     display:inline-block;
     width:25%;
-    /*All the card images have whitespace around the top...*/
+    
+    /* Required to make the absolute positioning on the card images work. */
+    position:relative;
+    
+    /*All the card images have whitespace around the top... let's squish that down. */
     margin-top:-40px;
 }
+.card::after
+{
+    /* Confused? 151% = ratio of the card image size, a.k.a. 307 * 465. 
+     * This makes our card div match the aspect ratio even when the image hasn't loaded yet, 
+     * allowing us to keep the page size consistent.
+     */
+    padding-top:151.4%;
+    display:block;
+    content:'';
+}
+
+/* 3 columns on smaller screens*/
+@media (max-width: 800px) { .card
+{
+    width:33%;
+}}
+/* 2 columns on phone screens */
+@media (max-width: 600px) { .card
+{
+    width:50%;
+}}
 
 .card img
 {
+    /* Absolute positioning required to prevent the card size interfering with our fixed-aspect div size. */
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    
     max-width:100%;
+    height:auto;
 }
 
 .class-button
@@ -16,23 +49,10 @@
     width:20%;
 }
 
-@media (max-width: 800px) {
-    .card
-    {
-        width:33%;
-    }
-}
-
-@media (max-width: 600px) {
-    .card
-    {
-        width:50%;
-    }
-    .class-button
-    {
-        width:50%;
-    }
-}
+@media (max-width: 600px) { .class-button
+{
+    width:50%;
+}}
 
 .card-area
 {
