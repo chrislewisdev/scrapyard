@@ -21,6 +21,6 @@
     </div>
     
     <div class="pagination">
-        <button ng-click="browser.previousPage()">&lt;</button><button ng-click="browser.nextPage()">&gt;</button>
+        <button class="previous-page" ng-if="browser.canPageBackwards()" ng-click="browser.previousPage()">&lt;</button><button class="next-page" ng-if="browser.canPageForwards()" ng-click="browser.nextPage()">&gt;</button>
     </div>
 </div>

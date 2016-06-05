@@ -78,6 +78,8 @@ angular.module('cards', ['ngRoute'])
         self.currentPage = +$routeParams.pageNumber;
         //No. of cards to display on each page
         self.pageSize = 12;
+        //Storage for the max no. of pages for our current search results.
+        self.maxPage = 0;
         
         /**
          * Gets the app path suitable for displaying the given class at the given page.
@@ -111,6 +113,22 @@ angular.module('cards', ['ngRoute'])
         }
         
         /**
+         * Returns true if there are any pages after our current one.
+         */
+        self.canPageForwards = function()
+        {
+            return self.currentPage < self.maxPage;
+        }
+        
+        /**
+         * Returns true if there are any pages before our current one.
+         */
+        self.canPageBackwards = function()
+        {
+            return self.currentPage > 0;
+        }
+        
+        /**
          * Advances our view to the next page.
          */
         self.nextPage = function()
@@ -131,10 +149,11 @@ angular.module('cards', ['ngRoute'])
          */
         self.initialise = function()
         {
+            self.maxPage = Math.floor(filterFilter(self.collection.cards, { playerClass: self.currentClass, type: '!hero' }).length / self.pageSize);
+            
             //Sanity-check our page number.
             if (self.currentPage < 0) self.currentPage = 0;
-            var maxPage = Math.floor(filterFilter(self.collection.cards, { playerClass: self.currentClass, type: '!hero' }).length / self.pageSize);
-            if (self.currentPage > maxPage) self.currentPage = maxPage;
+            if (self.currentPage > self.maxPage) self.currentPage = self.maxPage;
             
             //Have we had to constrain our current page number? Redirect so the path reflects what we're displaying.
             if (self.currentPage != $routeParams.pageNumber)

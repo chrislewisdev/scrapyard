@@ -45,3 +45,11 @@
     height:80px;
     font-size:400%;
 }
+.next-page
+{
+    float:right;
+}
+.previous-page
+{
+    float:left;
+}
