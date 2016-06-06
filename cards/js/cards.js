@@ -51,7 +51,7 @@ angular.module('cards', ['ngRoute'])
             },
             function error(response)
             {
-                self.loadingSignals[cardClass].reject();
+                self.loadingSignals[cardClass].reject(response);
             });
         });
     })
@@ -164,10 +164,18 @@ angular.module('cards', ['ngRoute'])
         /**
          * Alternate initialisation if we were unable to load up our data properly.
          */
-        self.onError = function()
+        self.onError = function(response)
         {
             self.initialised = true;
             self.error = true;
+            
+            //Build up some rudimentary error info for some help diagnosing.
+            self.errorInfo =
+            {
+                status: response.status,
+                statusText: response.statusText,
+                message: response.data ? response.data.message : 'None Given :('
+            };
         }
         
         //Make sure we're looking for a valid class before we initialise.

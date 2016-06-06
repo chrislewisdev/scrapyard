@@ -15,7 +15,14 @@
     </div>
     
     <div class="error-message" ng-if="browser.initialised && browser.error">
-        There was an error :(
+        <p>Sorry! There was a problem loading all the cards. </p>
+        
+        <p>Try again later or tweet at <a href="https://twitter.com/cl_dev">@cl_dev</a> to let me know something's wrong!</p>
+        
+        <p class="error-info">
+            <strong>Response</strong>: {{browser.errorInfo.status}} {{browser.errorInfo.statusText}}<br />
+            <strong>Error Message</strong>: {{browser.errorInfo.message}}
+        </p>
     </div>
     
     <div class="collection-view" ng-if="browser.initialised">
