@@ -172,9 +172,8 @@ angular.module('cards', ['ngRoute'])
             //Build up some rudimentary error info for some help diagnosing.
             self.errorInfo =
             {
-                status: response.status,
-                statusText: response.statusText,
-                message: response.data ? response.data.message : 'None Given :('
+                statusText: response.status > 0 ? response.status + ' ' + response.statusText : 'Unable to reach cards API',
+                message: response.data ? response.data.message : 'None Available'
             };
         }
         
