@@ -32,7 +32,17 @@
                                                 filter: { playerClass: browser.currentClass, type: '!hero' } | 
                                                 startFrom: browser.currentPage * browser.pageSize |
                                                 limitTo: browser.pageSize">
-                    <img src="{{card.img}}" />
+                    <div class="card-preview">
+                        <div class="card-name">{{card.name}}</div>
+                        <div class="card-rarity">{{card.rarity}}</div>
+                        <div class="card-cost">{{card.cost}}</div>
+                        <div class="card-attack" ng-if="card.type == 'Minion'">{{card.attack}}</div>
+                        <div class="card-health" ng-if="card.type == 'Minion'">{{card.health}}</div>
+                        <div class="card-text">{{card.text}}</div>
+                        <div class="card-race">{{card.race}}</div>
+                    </div>
+                    
+                    <!--<img src="{{card.img}}" />-->
                 </div>
             </div>
         </div>

@@ -66,6 +66,71 @@
     height:auto;
 }
 
+.card-preview
+{
+    /* Absolute positioning required to prevent the card size interfering with our fixed-aspect div size. */
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    
+    margin-top:40px;
+    
+    border:1px solid black;
+}
+
+.card-preview .card-name
+{
+    position:absolute;
+    top:25%;
+    
+    width:100%;
+    
+    text-align:center;
+    font-size:150%;
+}
+.card-preview .card-rarity
+{
+    position:absolute;
+    top:40%;
+    
+    width:100%;
+    
+    text-align:center;
+}
+.card-preview .card-cost
+{
+    position:absolute;
+    left:5%;
+    
+    font-size:200%;
+}
+.card-preview .card-attack
+{
+    position:absolute;
+    left:5%;
+    bottom:5%;
+    
+    font-size:200%;
+}
+.card-preview .card-health
+{
+    position:absolute;
+    right:5%;
+    bottom:5%;
+    
+    font-size:200%;
+}
+.card-preview .card-text
+{
+    display:none;
+}
+.card-preview .card-race
+{
+    display:none;
+}
+
 .card-area
 {
     margin-top:20px;
