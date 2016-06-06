@@ -1,4 +1,4 @@
-angular.module('cards', ['ngRoute'])
+angular.module('cards', ['ngRoute', 'ngSanitize'])
     .service('Collection', function($http, $q)
     {
         var self = this;
