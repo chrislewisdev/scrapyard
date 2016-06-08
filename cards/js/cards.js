@@ -95,6 +95,8 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         self.initialised = false;
         //Set to true if there was a loading error.
         self.error = false;
+        //Toggle for text-only mode.
+        self.showImages = false;
         
         /**
          * Gets the app path suitable for displaying the given class at the given page.
@@ -150,6 +152,14 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         self.previousPage = function()
         {
             $location.path(self.getPath(self.currentClass, self.currentPage - 1));
+        }
+
+        /**
+         * Toggles text-only mode on or off.
+         */
+        self.toggleShowImages = function()
+        {
+            self.showImages = !self.showImages;
         }
         
         /**

@@ -1,5 +1,9 @@
 <div class="body container">
     <div class="row">
+        <button ng-click="browser.toggleShowImages()" ng-class="{ 'button-primary' : browser.showImages }">Text-Only Mode</button>
+    </div>
+
+    <div class="row">
         <div class="twelve columns">
             <button class="class-button" 
                 ng-class="{ 'button-primary' : browser.isCurrentClass(class) }" 
@@ -43,7 +47,7 @@
                         <div class="card-race">{{card.race}}</div>
                     </div>
                     
-                    <img src="{{card.img}}" />
+                    <img src="{{card.img}}" ng-if="!browser.showImages" />
                 </div>
             </div>
         </div>
