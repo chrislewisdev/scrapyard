@@ -1,0 +1,168 @@
+.card-preview
+{
+    /* Absolute positioning required to prevent the card size interfering with our fixed-aspect div size. */
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    
+    margin-top:25%;
+    margin-bottom:10%;
+    margin-left:10.5%;
+    margin-right:10.5%;
+    
+    border:1px solid black;
+    border-radius:3px;
+    
+    line-height:1;
+}
+
+/*************** NAME ****************/
+.card-preview .card-name
+{
+    position:absolute;
+    top:12%;
+    left:5%;
+    
+    width:90%;
+    height:30%;
+    
+    text-align:center;
+    font-size:150%;
+    
+    /* For vertical alignment. */
+    display:table;
+}
+.card-preview .card-name span
+{
+    display:table-cell;
+    vertical-align:middle;
+}
+
+/*************** RARITY ****************/
+.card-preview .card-rarity
+{
+    position:absolute;
+    top:45%;
+    
+    width:100%;
+    
+    text-align:center;
+    font-weight:bold;
+}
+.card-rarity.Rare { color:blue; }
+.card-rarity.Epic { color:purple; }
+.card-rarity.Legendary { color:orange; }
+
+
+/*************** COST ****************/
+.card-preview .card-cost
+{
+    position:absolute;
+    top:1%;
+    left:2%;
+    
+    font-size:200%;
+
+    color:#293e5c;
+}
+
+/*************** ATTACK ****************/
+.card-preview .card-attack
+{
+    position:absolute;
+    left:2%;
+    bottom:2%;
+    
+    font-size:200%;
+}
+
+/*************** HEALTH ****************/
+.card-preview .card-health
+{
+    position:absolute;
+    right:2%;
+    bottom:2%;
+    
+    font-size:200%;
+}
+
+/*************** CARD TEXT ****************/
+.card-preview .card-text
+{
+    position:absolute;
+    top:55%;
+    left:7.5%;
+    
+    width:85%;
+    height:32%;
+    text-align:center;
+    
+    /* For vertical alignment. */
+    display:table;
+}
+.card-preview .card-text span
+{
+    display:table-cell;
+    vertical-align:middle;
+}
+
+/*************** RACE ****************/
+.card-preview .card-race
+{
+    position:absolute;
+    bottom:2%;
+    
+    width:100%;
+    text-align:center;
+}
+
+/********* MAGIC NUMBERS INCOMING *************
+ * These sizes are all chosen to scale the text to a readable size that fits for each screen size.
+ * Clearly, these are prone to break if we change the UI- but until parent-relative text scaling
+ * comes to CSS, this is the only non-JS way to make everything readable.
+ */
+
+@media (max-width: 1220px) {
+    .card-preview .card-name
+    {
+        font-size:1.85vw;
+    }
+    .card-preview .card-text, .card-preview .card-rarity, .card-preview .card-race
+    {
+        font-size:1.23vw;
+    }
+    .card-preview .card-health, .card-preview .card-attack, .card-preview .card-cost
+    {
+        font-size:2.46vw;
+    }
+}
+@media (max-width: 950px) {
+    .card-preview .card-name
+    {
+        font-size:2.4vw;
+    }
+    .card-preview .card-text, .card-preview .card-rarity, .card-preview .card-race
+    {
+        font-size:1.75vw;
+    }
+    .card-preview .card-health, .card-preview .card-attack, .card-preview .card-cost
+    {
+        font-size:3.4vw;
+    }
+}
+@media (max-width: 550px) {
+    .card-preview .card-name
+    {
+        font-size:3.75vw;
+    }
+    .card-preview .card-text, .card-preview .card-rarity, .card-preview .card-race
+    {
+        font-size:3.1vw;
+    }
+    .card-preview .card-health, .card-preview .card-attack, .card-preview .card-cost
+    {
+        font-size:5.5vw;
+    }
+}

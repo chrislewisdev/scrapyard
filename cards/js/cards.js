@@ -21,8 +21,24 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             'Warrior',
             'Neutral'
         ];
-        //Promise that is resolved once we've finished loading our base information
-        self.deferredLoading = $q.defer();
+
+        /**
+         * Processes an array of cards, merging them into our collection. 
+         * Performs any data wrangling appropriate for our system.
+         */
+        self.ingestCards = function(newCards, ofClass)
+        {
+            newCards.forEach(function(card)
+            {
+                //Neutral cards have no playerClass property, so set it explicitly for consistency
+                card.playerClass = ofClass;
+
+                //Translate 'Free' cards to be Basic
+                if (card.rarity === 'Free') card.rarity = 'Basic';
+
+                self.cards.push(card);
+            });
+        }
         
         //For each class, create a promise that will be resolved when it has finished loading.
         self.loadingSignals = {};
@@ -39,12 +55,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             .then(function success(response)
             {
                 //TODO: Any validation?
-                response.data.forEach(function(card)
-                {
-                    //Neutral cards have no playerClass property, so set it explicitly for consistency
-                    card.playerClass = cardClass;
-                    self.cards.push(card);
-                });
+                self.ingestCards(response.data, cardClass);
                 
                 //Resolve our promise for this class
                 self.loadingSignals[cardClass].resolve();
