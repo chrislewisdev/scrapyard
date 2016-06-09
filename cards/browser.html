@@ -1,9 +1,5 @@
 <div class="body container">
     <div class="row">
-        <button ng-click="browser.toggleShowImages()" ng-class="{ 'button-primary' : browser.showImages }">Text-Only Mode</button>
-    </div>
-
-    <div class="row">
         <div class="twelve columns">
             <button class="class-button" 
                 ng-class="{ 'button-primary' : browser.isCurrentClass(class) }" 
@@ -12,6 +8,13 @@
                 {{class}}
             </button>
         </div>
+    </div>
+
+    <div class="row display-options">
+        <span>Image Display</span>
+        <button ng-click="browser.viewOptions.enableTextOnly()" ng-class="{ 'button-primary' : browser.viewOptions.isTextOnly() }">None</button>
+        <button ng-click="browser.viewOptions.enableNormalImages()" ng-class="{ 'button-primary' : browser.viewOptions.isNormalImages() }">Normal</button>
+        <button ng-click="browser.viewOptions.enableGoldenImages()" ng-class="{ 'button-primary' : browser.viewOptions.isGoldenImages() }">Golden</button>
     </div>
     
     <div class="loading-indicator" ng-if="!browser.initialised">
@@ -47,7 +50,8 @@
                         <div class="card-race">{{card.race}}</div>
                     </div>
                     
-                    <img src="{{card.img}}" ng-if="!browser.showImages" />
+                    <img src="{{card.img}}" ng-if="browser.viewOptions.isNormalImages()" />
+                    <img src="{{card.imgGold}}" ng-if="browser.viewOptions.isGoldenImages()" />
                 </div>
             </div>
         </div>

@@ -66,6 +66,42 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             });
         });
     })
+    .service('ViewOptions', function()
+    {
+        var self = this;
+
+        //Enum of possible image display modes
+        self.displayModes = { none : 0, normal : 1, golden : 2 };
+        //Storage for our current display mode.
+        self.displayMode = self.displayModes.normal;
+
+        self.enableTextOnly = function()
+        {
+            self.displayMode = self.displayModes.none;
+        }
+        self.isTextOnly = function()
+        {
+            return self.displayMode === self.displayModes.none;
+        }
+
+        self.enableNormalImages = function()
+        {
+            self.displayMode = self.displayModes.normal;
+        }
+        self.isNormalImages = function()
+        {
+            return self.displayMode === self.displayModes.normal;
+        }
+
+        self.enableGoldenImages = function()
+        {
+            self.displayMode = self.displayModes.golden;
+        }
+        self.isGoldenImages = function()
+        {
+            return self.displayMode === self.displayModes.golden;
+        }
+    })
     .config(function($routeProvider)
     {
         $routeProvider
@@ -77,11 +113,12 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             //In THEORY, we can't know if Druid is a real class until the API returns back. But meh.
             .otherwise({redirectTo:'/Druid/0'});
     })
-    .controller('BrowserController', function($routeParams, $location, Collection, filterFilter)
+    .controller('BrowserController', function($routeParams, $location, Collection, ViewOptions, filterFilter)
     {
         var self = this;
         
         self.collection = Collection;
+        self.viewOptions = ViewOptions;
         
         //Our currently selected class
         self.currentClass = $routeParams.class;

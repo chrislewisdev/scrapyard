@@ -8,6 +8,37 @@
     width:50%;
 }}
 
+.display-options
+{
+    border:1px solid grey;
+    border-radius:4px;
+
+    padding:15px 5px 5px 5px;
+}
+.display-options span
+{
+    display:inline-block;
+    width:24%;
+    height:38px;
+    line-height:38px;
+    font-size:120%;
+    text-align:center;
+}
+.display-options button
+{
+    width:24%;
+}
+@media (max-width: 650px) { 
+    .display-options span
+    {
+        width:100%;
+    }
+    .display-options button
+    {
+        width:100%;
+    }
+}
+
 .loading-indicator, .error-message
 {
     text-align:center;
