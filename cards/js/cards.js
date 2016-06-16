@@ -36,6 +36,13 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
                 //Translate 'Free' cards to be Basic
                 if (card.rarity === 'Free') card.rarity = 'Basic';
 
+                //Filter out some internal card effect symbols
+                if (card.text != null)
+                {
+                    card.text = card.text.replace(/[$#](\d+)/, "$1");
+                    card.text = card.text.replace("[x]", "");
+                }
+
                 self.cards.push(card);
             });
         }
