@@ -48,6 +48,7 @@
                         <div class="card-health" ng-if="card.type == 'Weapon'">{{card.durability}}</div>
                         <div class="card-text"><span ng-bind-html="card.text"></span></div>
                         <div class="card-race">{{card.race}}</div>
+                        <div class="card-type">{{card.type}}</div>
                     </div>
                     
                     <img src="{{card.img}}" ng-if="browser.viewOptions.isNormalImages()" />
