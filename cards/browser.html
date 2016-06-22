@@ -51,8 +51,8 @@
                         <div class="card-type">{{card.type}}</div>
                     </div>
                     
-                    <img src="{{card.img}}" ng-if="browser.viewOptions.isNormalImages()" />
-                    <img src="{{card.imgGold}}" ng-if="browser.viewOptions.isGoldenImages()" />
+                    <img ng-src="{{card.img}}" ng-if="browser.viewOptions.isNormalImages()" />
+                    <img ng-src="{{card.imgGold}}" ng-if="browser.viewOptions.isGoldenImages()" />
                 </div>
             </div>
         </div>
