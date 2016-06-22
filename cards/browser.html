@@ -16,6 +16,10 @@
         <button ng-click="browser.viewOptions.enableNormalImages()" ng-class="{ 'button-primary' : browser.viewOptions.isNormalImages() }">Normal</button>
         <button ng-click="browser.viewOptions.enableGoldenImages()" ng-class="{ 'button-primary' : browser.viewOptions.isGoldenImages() }">Golden</button>
     </div>
+
+    <div class="row filter-options">
+        <input ng-change="browser.search(browser.searchOptions.text.value)" ng-model="browser.searchOptions.text.value" />
+    </div>
     
     <div class="loading-indicator" ng-if="!browser.initialised">
         Loading...
@@ -36,9 +40,9 @@
         <div class="row card-area">
             <div class="twelve columns">
                 <div class="card" ng-repeat="card in browser.collection.cards | 
-                                                filter: { playerClass: browser.currentClass, type: '!hero' } | 
-                                                startFrom: browser.currentPage * browser.pageSize |
-                                                limitTo: browser.pageSize">
+                                                filter: { playerClass: browser.searchOptions.class, type: '!hero', name: browser.searchOptions.text.value } | 
+                                                startFrom: browser.searchOptions.page.value * browser.searchOptions.pageSize |
+                                                limitTo: browser.searchOptions.pageSize">
                     <div class="card-preview">
                         <div class="card-name"><span>{{card.name}}</span></div>
                         <div class="card-rarity {{card.rarity}}">{{card.rarity}}</div>

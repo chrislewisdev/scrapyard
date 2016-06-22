@@ -109,6 +109,37 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             return self.displayMode === self.displayModes.golden;
         }
     })
+    .service('SearchOptions', function($routeParams, $location, filterFilter, $rootScope)
+    {
+        var self = this;
+
+        var SearchTerm = function(name, value)
+        {
+            this.name = name;
+            this.value = value;
+
+            this.update = function(newValue)
+            {
+                this.value = newValue;
+                $location.search(this.name, this.value);
+            }
+        }
+
+        self.pageSize = 12;
+
+        self.init = function()
+        {
+            self.class = $routeParams.class;
+
+            self.page = new SearchTerm('page', isNaN(+$routeParams.page) ? 0 : +$routeParams.page);
+            self.text = new SearchTerm('text', $routeParams.text);
+        }
+
+        $rootScope.$on('$locationChangeSuccess', function()
+        {
+            self.init(); //FULL INIT VS VALIDATION?
+        });
+    })
     .config(function($routeProvider)
     {
         $routeProvider
@@ -116,25 +147,20 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             {
                 controller:'BrowserController as browser',
                 templateUrl:'browser.html',
+                reloadOnSearch:false,
             })
-            //In THEORY, we can't know if Druid is a real class until the API returns back. But meh.
             .otherwise({redirectTo:'/Druid'});
     })
-    .controller('BrowserController', function($routeParams, $location, Collection, ViewOptions, filterFilter)
+    .controller('BrowserController', function($routeParams, $location, $rootScope, Collection, ViewOptions, filterFilter, SearchOptions)
     {
         var self = this;
         
         self.collection = Collection;
         self.viewOptions = ViewOptions;
+        self.searchOptions = SearchOptions;
 
-        self.searchParams = { page : 'page' }
-        
-        //Our currently selected class
-        self.currentClass = $routeParams.class;
-        //Current page (starts at 0)
-        self.currentPage = isNaN(+$routeParams[self.searchParams.page]) ? 0 : +$routeParams[self.searchParams.page];
-        //No. of cards to display on each page
-        self.pageSize = 12;
+        self.searchOptions.init();
+
         //Storage for the max no. of pages for our current search results.
         self.maxPage = 0;
         //Set to true once initialisation is complete.
@@ -149,7 +175,14 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
          */
         self.clearSearch = function()
         {
-            $location.search(self.searchParams.page, null);
+            self.searchOptions.page.update(null);
+            self.searchOptions.text.update(null);
+        }
+
+        self.search = function(text)
+        {
+            self.clearSearch();
+            self.searchOptions.text.update(text);
         }
         
         /**
@@ -157,7 +190,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
          */
         self.setClass = function(toClass)
         {
-            self.clearSearch();
+            self.searchOptions.page.update(null);
             $location.path('/' + toClass);
         }
         
@@ -166,7 +199,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
          */
         self.isCurrentClass = function(anyClass)
         {
-            return (anyClass == self.currentClass);
+            return (anyClass == self.searchOptions.class);
         }
         
         /**
@@ -174,7 +207,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
          */
         self.canPageForwards = function()
         {
-            return self.initialised && self.currentPage < self.maxPage;
+            return self.initialised && self.searchOptions.page.value < self.maxPage;
         }
         
         /**
@@ -182,7 +215,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
          */
         self.canPageBackwards = function()
         {
-            return self.initialised && self.currentPage > 0;
+            return self.initialised && self.searchOptions.page.value  > 0;
         }
         
         /**
@@ -190,7 +223,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
          */
         self.nextPage = function()
         {
-            $location.search(self.searchParams.page, self.currentPage + 1)
+            self.searchOptions.page.update(self.searchOptions.page.value  + 1);
         }
         
         /**
@@ -198,7 +231,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
          */
         self.previousPage = function()
         {
-            $location.search(self.searchParams.page, self.currentPage - 1)
+            self.searchOptions.page.update(self.searchOptions.page.value  - 1);
         }
 
         /**
@@ -214,20 +247,20 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
          */
         self.initialise = function()
         {
-            self.maxPage = Math.floor(filterFilter(self.collection.cards, { playerClass: self.currentClass, type: '!hero' }).length / self.pageSize);
-            
+            self.maxPage = Math.floor(filterFilter(self.collection.cards, { playerClass: self.searchOptions.class, type: '!hero', name: self.searchOptions.text.value }).length / self.searchOptions.pageSize);
+
             //Sanity-check our page number.
-            if (self.currentPage < 0) self.currentPage = 0;
-            if (self.currentPage > self.maxPage) self.currentPage = self.maxPage;
-            
-            //Have we had to constrain our current page number? Redirect so the path reflects what we're displaying.
-            if (self.currentPage != $routeParams[self.searchParams.page])
-            {
-                $location.search(self.searchParams.page, self.currentPage);
-            }
+            if (self.searchOptions.page.value < 0) self.searchOptions.page.update(0);
+            if (self.searchOptions.page.value > self.maxPage) self.searchOptions.page.update(self.maxPage);
             
             self.initialised = true;
         }
+
+        $rootScope.$on('$locationChangeSuccess', function()
+        {
+            //TODO: Reconsider full-init vs validation
+            self.initialise();
+        });
         
         /**
          * Alternate initialisation if we were unable to load up our data properly.
@@ -246,13 +279,13 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         }
         
         //Make sure we're looking for a valid class before we initialise.
-        if (self.collection.classes.indexOf(self.currentClass) === -1)
+        if (self.collection.classes.indexOf(self.searchOptions.class) === -1)
         {
             $location.path(self.collection.classes[0]);  //Redirect to something sensible.
         }
         else
         {
-            self.collection.loadingSignals[self.currentClass].promise.then(self.initialise, self.onError);
+            self.collection.loadingSignals[self.searchOptions.class].promise.then(self.initialise, self.onError);
         }
     })
     .filter('startFrom', function()
