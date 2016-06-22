@@ -112,13 +112,13 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
     .config(function($routeProvider)
     {
         $routeProvider
-            .when('/:class/:pageNumber',
+            .when('/:class',
             {
                 controller:'BrowserController as browser',
                 templateUrl:'browser.html',
             })
             //In THEORY, we can't know if Druid is a real class until the API returns back. But meh.
-            .otherwise({redirectTo:'/Druid/0'});
+            .otherwise({redirectTo:'/Druid'});
     })
     .controller('BrowserController', function($routeParams, $location, Collection, ViewOptions, filterFilter)
     {
@@ -126,11 +126,13 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         
         self.collection = Collection;
         self.viewOptions = ViewOptions;
+
+        self.searchParams = { page : 'page' }
         
         //Our currently selected class
         self.currentClass = $routeParams.class;
         //Current page (starts at 0)
-        self.currentPage = +$routeParams.pageNumber;
+        self.currentPage = isNaN(+$routeParams[self.searchParams.page]) ? 0 : +$routeParams[self.searchParams.page];
         //No. of cards to display on each page
         self.pageSize = 12;
         //Storage for the max no. of pages for our current search results.
@@ -141,13 +143,13 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         self.error = false;
         //Toggle for text-only mode.
         self.showImages = false;
-        
+
         /**
-         * Gets the app path suitable for displaying the given class at the given page.
+         * Clears out any existing search parameters.
          */
-        self.getPath = function(forClass, page)
+        self.clearSearch = function()
         {
-            return '/' + forClass + '/' + page;
+            $location.search(self.searchParams.page, null);
         }
         
         /**
@@ -155,7 +157,8 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
          */
         self.setClass = function(toClass)
         {
-            $location.path(self.getPath(toClass, 0));
+            self.clearSearch();
+            $location.path('/' + toClass);
         }
         
         /**
@@ -187,7 +190,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
          */
         self.nextPage = function()
         {
-            $location.path(self.getPath(self.currentClass, self.currentPage + 1));
+            $location.search(self.searchParams.page, self.currentPage + 1)
         }
         
         /**
@@ -195,7 +198,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
          */
         self.previousPage = function()
         {
-            $location.path(self.getPath(self.currentClass, self.currentPage - 1));
+            $location.search(self.searchParams.page, self.currentPage - 1)
         }
 
         /**
@@ -218,9 +221,9 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             if (self.currentPage > self.maxPage) self.currentPage = self.maxPage;
             
             //Have we had to constrain our current page number? Redirect so the path reflects what we're displaying.
-            if (self.currentPage != $routeParams.pageNumber)
+            if (self.currentPage != $routeParams[self.searchParams.page])
             {
-                $location.path(self.getPath(self.currentClass, self.currentPage));
+                $location.search(self.searchParams.page, self.currentPage);
             }
             
             self.initialised = true;
@@ -245,7 +248,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         //Make sure we're looking for a valid class before we initialise.
         if (self.collection.classes.indexOf(self.currentClass) === -1)
         {
-            $location.path(self.collection.classes[0], 0);  //Redirect to something sensible.
+            $location.path(self.collection.classes[0]);  //Redirect to something sensible.
         }
         else
         {
