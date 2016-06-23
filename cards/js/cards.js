@@ -132,7 +132,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             self.class = $routeParams.class;
 
             self.page = new SearchTerm('page', isNaN(+$routeParams.page) ? 0 : +$routeParams.page);
-            self.text = new SearchTerm('text', $routeParams.text);
+            self.text = new SearchTerm('text', $routeParams.text == null ? '' : $routeParams.text);
         }
 
         $rootScope.$on('$locationChangeSuccess', function()
