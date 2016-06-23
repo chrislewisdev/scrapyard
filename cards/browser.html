@@ -10,15 +10,16 @@
         </div>
     </div>
 
-    <div class="row display-options">
+    <div class="row options display-options">
         <span>Image Display</span>
         <button ng-click="browser.viewOptions.enableTextOnly()" ng-class="{ 'button-primary' : browser.viewOptions.isTextOnly() }">None</button>
         <button ng-click="browser.viewOptions.enableNormalImages()" ng-class="{ 'button-primary' : browser.viewOptions.isNormalImages() }">Normal</button>
         <button ng-click="browser.viewOptions.enableGoldenImages()" ng-class="{ 'button-primary' : browser.viewOptions.isGoldenImages() }">Golden</button>
     </div>
 
-    <div class="row filter-options">
-        <input ng-change="browser.search(browser.searchOptions.text.value)" ng-model="browser.searchOptions.text.value" />
+    <div class="row options filter-options">
+        <span>Filters</span>
+        <input type="text" ng-change="browser.search()" ng-model="browser.textFilter" placeholder="Text search..." autofocus />
     </div>
     
     <div class="loading-indicator" ng-if="!browser.initialised">
@@ -39,8 +40,7 @@
     <div class="collection-view" ng-if="browser.initialised">
         <div class="row card-area">
             <div class="twelve columns">
-                <div class="card" ng-repeat="card in browser.collection.cards | 
-                                                filter: { playerClass: browser.searchOptions.class, type: '!hero', name: browser.searchOptions.text.value } | 
+                <div class="card" ng-repeat="card in browser.collection.cards | searchFilter | 
                                                 startFrom: browser.searchOptions.page.value * browser.searchOptions.pageSize |
                                                 limitTo: browser.searchOptions.pageSize">
                     <div class="card-preview">

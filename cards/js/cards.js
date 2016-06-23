@@ -151,7 +151,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             })
             .otherwise({redirectTo:'/Druid'});
     })
-    .controller('BrowserController', function($routeParams, $location, $rootScope, Collection, ViewOptions, filterFilter, SearchOptions)
+    .controller('BrowserController', function($routeParams, $location, $rootScope, Collection, ViewOptions, searchFilterFilter, SearchOptions)
     {
         var self = this;
         
@@ -167,8 +167,8 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         self.initialised = false;
         //Set to true if there was a loading error.
         self.error = false;
-        //Toggle for text-only mode.
-        self.showImages = false;
+        //Our current text filter.
+        self.textFilter = self.searchOptions.text.value;
 
         /**
          * Clears out any existing search parameters.
@@ -179,10 +179,13 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             self.searchOptions.text.update(null);
         }
 
-        self.search = function(text)
+        /**
+         * Forces an update of our current text search.
+         */
+        self.search = function()
         {
             self.clearSearch();
-            self.searchOptions.text.update(text);
+            self.searchOptions.text.update(self.textFilter);
         }
         
         /**
@@ -233,35 +236,23 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         {
             self.searchOptions.page.update(self.searchOptions.page.value  - 1);
         }
-
-        /**
-         * Toggles text-only mode on or off.
-         */
-        self.toggleShowImages = function()
-        {
-            self.showImages = !self.showImages;
-        }
         
         /**
          * Initialises our controller once the current class is loaded.
          */
         self.initialise = function()
         {
-            self.maxPage = Math.floor(filterFilter(self.collection.cards, { playerClass: self.searchOptions.class, type: '!hero', name: self.searchOptions.text.value }).length / self.searchOptions.pageSize);
+            self.maxPage = Math.floor(searchFilterFilter(self.collection.cards).length / self.searchOptions.pageSize);
 
             //Sanity-check our page number.
             if (self.searchOptions.page.value < 0) self.searchOptions.page.update(0);
             if (self.searchOptions.page.value > self.maxPage) self.searchOptions.page.update(self.maxPage);
+
+            self.textFilter = self.searchOptions.text.value;
             
             self.initialised = true;
         }
 
-        $rootScope.$on('$locationChangeSuccess', function()
-        {
-            //TODO: Reconsider full-init vs validation
-            self.initialise();
-        });
-        
         /**
          * Alternate initialisation if we were unable to load up our data properly.
          */
@@ -277,6 +268,13 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
                 message: response.data ? response.data.message : 'None Available'
             };
         }
+
+        //Whenever our location updates, refresh.
+        $rootScope.$on('$locationChangeSuccess', function()
+        {
+            //TODO: Reconsider full-init vs validation
+            self.initialise();
+        });
         
         //Make sure we're looking for a valid class before we initialise.
         if (self.collection.classes.indexOf(self.searchOptions.class) === -1)
@@ -294,4 +292,33 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         {
             return input.slice(start);
         };
+    })
+    .filter('searchFilter', function(SearchOptions, filterFilter)
+    {
+        return function (input)
+        {
+            var self = this;
+
+            /**
+             * Returns true if a card's text/name/race/type/rarity match our current search term.
+             */
+            self.matchesText = function(card)
+            {
+                var text = SearchOptions.text.value.toLowerCase();
+                if (card.text != null && card.text.toLowerCase().indexOf(text) >= 0) return true;
+                if (card.name != null && card.name.toLowerCase().indexOf(text) >= 0) return true;
+                if (card.race != null && card.race.toLowerCase().indexOf(text) >= 0) return true;
+                if (card.type != null && card.type.toLowerCase().indexOf(text) >= 0) return true;
+                if (card.rarity != null && card.rarity.toLowerCase().indexOf(text) >= 0) return true;
+                return false;
+            };
+
+            return filterFilter(input,
+                                function(card)
+                                {
+                                    return card.playerClass == SearchOptions.class 
+                                            && card.type != 'Hero' 
+                                            && self.matchesText(card);
+                                });
+        }
     });

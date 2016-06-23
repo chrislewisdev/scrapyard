@@ -8,14 +8,15 @@
     width:50%;
 }}
 
-.display-options
+.options
 {
     border:1px solid grey;
     border-radius:4px;
 
     padding:15px 5px 5px 5px;
+    margin-top:5px;
 }
-.display-options span
+.options span
 {
     display:inline-block;
     width:24%;
@@ -24,18 +25,32 @@
     font-size:120%;
     text-align:center;
 }
+@media (max-width: 650px) { 
+    .options span
+    {
+        width:100%;
+    }
+}
+
 .display-options button
 {
     width:24%;
 }
 @media (max-width: 650px) { 
-    .display-options span
-    {
-        width:100%;
-    }
     .display-options button
     {
         width:100%;
+    }
+}
+
+.filter-options input
+{
+    width:72.5%;
+}
+@media (max-width: 650px) { 
+    .filter-options input
+    {
+        width:98%;
     }
 }
 
