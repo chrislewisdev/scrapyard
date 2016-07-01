@@ -19,7 +19,19 @@
 
     <div class="row options filter-options">
         <span>Filters</span>
+
         <input type="text" ng-change="browser.search()" ng-model="browser.textFilter" placeholder="Text search..." autofocus />
+
+        <select ng-change="browser.search()" ng-model="browser.setFilter">
+            <option value="">All</option>
+            <option value="Standard">Standard</option>
+            <option ng-repeat="set in browser.collection.sets" value="{{set}}">{{set}}</option>
+        </select>
+
+        <select ng-change="browser.search()" ng-model="browser.rarityFilter">
+            <option value="">All</option>
+            <option ng-repeat="rarity in browser.collection.rarities" value="{{rarity}}">{{rarity}}</option>
+        </select>
     </div>
     
     <div class="loading-indicator" ng-if="!browser.initialised">

@@ -21,6 +21,32 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             'Warrior',
             'Neutral'
         ];
+        //Card set storage.
+        self.sets = [];
+        //The API has no notion of Standard/Wild, so we need to hard-code these :(
+        self.standardSets = 
+        [
+            'Basic',
+            'Classic',
+            'Blackrock Mountain',
+            'The Grand Tournament',
+            'The League of Explorers',
+            'Whispers of the Old Gods'
+        ];
+        //The Hearthstone API returns a bunch of internal sets along with the 'real' ones. We need to exclude these.
+        self.internalSets = 
+        [
+            'Credits',
+            'Slush',
+            'Missions',
+            'Promo',
+            'Reward',
+            'System',
+            'Hero Skins',
+            'Tavern Brawl',
+        ];
+        //Storage for all existing card rarities
+        self.rarities = [];
 
         /**
          * Processes an array of cards, merging them into our collection. 
@@ -71,6 +97,22 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             {
                 self.loadingSignals[cardClass].reject(response);
             });
+        });
+
+        //Retrieve any generic collection info we need, e.g. current sets.
+        $http.get('https://omgvamp-hearthstone-v1.p.mashape.com/info/',
+        { headers: self.requestHeaders } )
+        .then(function success(response)
+        {
+            //Include only the sets that aren't internal ones.
+            self.sets = response.data.sets.filter(function(set)
+            {
+                return self.internalSets.indexOf(set) < 0;
+            });
+
+            //'Free' should refer to Free or Basic. For us, this is all classified as Basic.
+            self.rarities = response.data.qualities;
+            self.rarities[0] = 'Basic';
         });
     })
     .service('ViewOptions', function()
@@ -133,6 +175,8 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
 
             self.page = new SearchTerm('page', isNaN(+$routeParams.page) ? 0 : +$routeParams.page);
             self.text = new SearchTerm('text', $routeParams.text == null ? '' : $routeParams.text);
+            self.set = new SearchTerm('set', $routeParams.set == null ? '' : $routeParams.set);
+            self.rarity = new SearchTerm('rarity', $routeParams.rarity == null ? '' : $routeParams.rarity);
         }
 
         $rootScope.$on('$locationChangeSuccess', function()
@@ -167,8 +211,10 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         self.initialised = false;
         //Set to true if there was a loading error.
         self.error = false;
-        //Our current text filter.
+        //Our current filters.
         self.textFilter = self.searchOptions.text.value;
+        self.setFilter = self.searchOptions.set.value;
+        self.rarityFilter = self.searchOptions.rarity.value;
 
         /**
          * Clears out any existing search parameters.
@@ -186,6 +232,8 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         {
             self.clearSearch();
             self.searchOptions.text.update(self.textFilter);
+            self.searchOptions.set.update(self.setFilter);
+            self.searchOptions.rarity.update(self.rarityFilter);
         }
         
         /**
@@ -242,11 +290,11 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
          */
         self.initialise = function()
         {
-            self.maxPage = Math.floor(searchFilterFilter(self.collection.cards).length / self.searchOptions.pageSize);
+            self.maxPage = Math.floor((searchFilterFilter(self.collection.cards).length - 1) / self.searchOptions.pageSize);
 
             //Sanity-check our page number.
-            if (self.searchOptions.page.value < 0) self.searchOptions.page.update(0);
             if (self.searchOptions.page.value > self.maxPage) self.searchOptions.page.update(self.maxPage);
+            if (self.searchOptions.page.value < 0) self.searchOptions.page.update(0);
 
             self.textFilter = self.searchOptions.text.value;
             
@@ -293,7 +341,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             return input.slice(start);
         };
     })
-    .filter('searchFilter', function(SearchOptions, filterFilter)
+    .filter('searchFilter', function(SearchOptions, Collection, filterFilter)
     {
         return function (input)
         {
@@ -313,12 +361,25 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
                 return false;
             };
 
+            /**
+             * Returns true if a card matches our current set restrictions, accounting for Standard formats.
+             */
+            self.matchesSet = function(card)
+            {
+                if (SearchOptions.set.value === '') return true;
+                if (card.cardSet == SearchOptions.set.value) return true;
+                if (SearchOptions.set.value === 'Standard' && Collection.standardSets.indexOf(card.cardSet) >= 0) return true;
+                return false;
+            }
+
             return filterFilter(input,
                                 function(card)
                                 {
                                     return card.playerClass == SearchOptions.class 
-                                            && card.type != 'Hero' 
-                                            && self.matchesText(card);
+                                            && card.type != 'Hero'
+                                            && self.matchesSet(card)
+                                            && self.matchesText(card)
+                                            && (SearchOptions.rarity.value === '' || card.rarity == SearchOptions.rarity.value);
                                 });
         }
     });
