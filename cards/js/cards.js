@@ -219,16 +219,31 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         self.rarityFilter = self.searchOptions.rarity.value;
         self.minimumCostFilter = self.searchOptions.minimumCost.value;
 
-        /**
-         * Forces an update of our current search.
-         */
-        self.search = function()
+        self.searchByText = function()
         {
             self.searchOptions.page.update(null);
 
             self.searchOptions.text.update(self.textFilter);
+        }
+
+        self.searchBySet = function()
+        {
+            self.searchOptions.page.update(null);
+
             self.searchOptions.set.update(self.setFilter);
+        }
+
+        self.searchByRarity = function()
+        {
+            self.searchOptions.page.update(null);
+
             self.searchOptions.rarity.update(self.rarityFilter);
+        }
+
+        self.searchByCost = function()
+        {
+            self.searchOptions.page.update(null);
+
             self.searchOptions.minimumCost.update(self.minimumCostFilter);
         }
         
