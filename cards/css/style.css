@@ -43,14 +43,64 @@
     }
 }
 
-.filter-options input
+.filter-options .heading
 {
-    width:72.5%;
+    width:24%;
+    float:left;
 }
-@media (max-width: 650px) { 
-    .filter-options input
+.filter-options .controls
+{
+    width:76%;
+    float:left;
+}
+.filter-options span
+{
+    width:100%;
+}
+.filter-options input[type=search]
+{
+    width:98%;
+}
+.filter-options div.fieldset
+{
+    display:inline-block;
+    width:30%;
+    padding-left:1%;
+    padding-right:1%;
+}
+.filter-options div.fieldset label
+{
+    display:inline-block;
+    width:100%;
+    font-size:115%;
+}
+.filter-options div.fieldset select, .filter-options div.fieldset input[type=range]
+{
+    width:100%;
+}
+@media (max-width: 650px) {
+    .filter-options .heading
     {
-        width:98%;
+        width:100%;
+    }
+    .filter-options .controls
+    {
+        width:100%;
+    }
+    .filter-options div.fieldset
+    {
+        display:block;
+        width:100%;
+    }
+    .filter-options div.fieldset label
+    {
+        display:inline-block;
+        width:24%;
+    }
+    .filter-options div.fieldset select, .filter-options div.fieldset input[type=range]
+    {
+        display:inline-block;
+        width:71%;
     }
 }
 
@@ -118,6 +168,7 @@
 .card-area
 {
     margin-top:20px;
+    min-height:750px;
 }
 
 .pagination button

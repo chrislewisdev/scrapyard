@@ -44,6 +44,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             'System',
             'Hero Skins',
             'Tavern Brawl',
+            'Debug'
         ];
         //Storage for all existing card rarities
         self.rarities = [];
@@ -177,11 +178,12 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             self.text = new SearchTerm('text', $routeParams.text == null ? '' : $routeParams.text);
             self.set = new SearchTerm('set', $routeParams.set == null ? '' : $routeParams.set);
             self.rarity = new SearchTerm('rarity', $routeParams.rarity == null ? '' : $routeParams.rarity);
+            self.minimumCost = new SearchTerm('minimumCost', isNaN(+$routeParams.minimumCost) ? 0 : +$routeParams.minimumCost)
         }
 
         $rootScope.$on('$locationChangeSuccess', function()
         {
-            self.init(); //FULL INIT VS VALIDATION?
+            self.init();
         });
     })
     .config(function($routeProvider)
@@ -215,25 +217,19 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         self.textFilter = self.searchOptions.text.value;
         self.setFilter = self.searchOptions.set.value;
         self.rarityFilter = self.searchOptions.rarity.value;
+        self.minimumCostFilter = self.searchOptions.minimumCost.value;
 
         /**
-         * Clears out any existing search parameters.
-         */
-        self.clearSearch = function()
-        {
-            self.searchOptions.page.update(null);
-            self.searchOptions.text.update(null);
-        }
-
-        /**
-         * Forces an update of our current text search.
+         * Forces an update of our current search.
          */
         self.search = function()
         {
-            self.clearSearch();
+            self.searchOptions.page.update(null);
+
             self.searchOptions.text.update(self.textFilter);
             self.searchOptions.set.update(self.setFilter);
             self.searchOptions.rarity.update(self.rarityFilter);
+            self.searchOptions.minimumCost.update(self.minimumCostFilter);
         }
         
         /**
@@ -379,7 +375,8 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
                                             && card.type != 'Hero'
                                             && self.matchesSet(card)
                                             && self.matchesText(card)
-                                            && (SearchOptions.rarity.value === '' || card.rarity == SearchOptions.rarity.value);
+                                            && (SearchOptions.rarity.value === '' || card.rarity == SearchOptions.rarity.value)
+                                            && +card.cost >= +SearchOptions.minimumCost.value;
                                 });
         }
     });

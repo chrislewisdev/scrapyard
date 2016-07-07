@@ -18,20 +18,35 @@
     </div>
 
     <div class="row options filter-options">
-        <span>Filters</span>
+        <div class="heading">
+            <span>Filters</span>
+        </div>
 
-        <input type="text" ng-change="browser.search()" ng-model="browser.textFilter" placeholder="Text search..." autofocus />
+        <div class="controls">
+            <input type="search" ng-change="browser.search()" ng-model="browser.textFilter" placeholder="Text search..." autofocus />
 
-        <select ng-change="browser.search()" ng-model="browser.setFilter">
-            <option value="">All</option>
-            <option value="Standard">Standard</option>
-            <option ng-repeat="set in browser.collection.sets" value="{{set}}">{{set}}</option>
-        </select>
+            <div class="fieldset">
+                <label>Set</label>
+                <select ng-change="browser.search()" ng-model="browser.setFilter">
+                    <option value="">All</option>
+                    <option value="Standard">Standard</option>
+                    <option ng-repeat="set in browser.collection.sets" value="{{set}}">{{set}}</option>
+                </select>
+            </div>
+            
+            <div class="fieldset">
+                <label>Rarity</label>
+                <select ng-change="browser.search()" ng-model="browser.rarityFilter">
+                    <option value="">All</option>
+                    <option ng-repeat="rarity in browser.collection.rarities" value="{{rarity}}">{{rarity}}</option>
+                </select>
+            </div>
 
-        <select ng-change="browser.search()" ng-model="browser.rarityFilter">
-            <option value="">All</option>
-            <option ng-repeat="rarity in browser.collection.rarities" value="{{rarity}}">{{rarity}}</option>
-        </select>
+            <div class="fieldset">
+                <label>Cost: {{browser.minimumCostFilter}}+</label>
+                <input ng-change="browser.search()" ng-model="browser.minimumCostFilter" type="range" min="0" max="10">
+            </div>
+        </div>
     </div>
     
     <div class="loading-indicator" ng-if="!browser.initialised">
