@@ -63,11 +63,21 @@
             <strong>Error Message</strong>: {{browser.errorInfo.message}}
         </p>
     </div>
+
+    <div class="error-message" ng-if="browser.initialised && browser.currentResults.length <= 0">
+        Sorry!<br/>
+        There are no 
+        <span>{{browser.rarityFilter}}</span> <span>{{browser.searchOptions.class}}</span> cards
+        <span ng-if="browser.setFilter != ''"><br/> in {{browser.setFilter}} </span>
+        <span ng-if="browser.textFilter != ''"><br/> with text '{{browser.textFilter}}' </span>
+        <span ng-if="browser.minimumCostFilter > 0"><br />that cost {{browser.minimumCostFilter}}+</span>
+        :(
+    </div>
     
     <div class="collection-view" ng-if="browser.initialised">
         <div class="row card-area">
             <div class="twelve columns">
-                <div class="card" ng-repeat="card in browser.collection.cards | searchFilter | 
+                <div class="card" ng-repeat="card in browser.currentResults | 
                                                 startFrom: browser.searchOptions.page.value * browser.searchOptions.pageSize |
                                                 limitTo: browser.searchOptions.pageSize">
                     <div class="card-preview">
@@ -92,5 +102,5 @@
             <button class="previous-page" ng-if="browser.canPageBackwards()" ng-click="browser.previousPage()">&lt;</button><button class="next-page" ng-if="browser.canPageForwards()" ng-click="browser.nextPage()">&gt;</button>
         </div>
     </div>
-    
+
 </div>

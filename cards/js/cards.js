@@ -218,6 +218,8 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         self.setFilter = self.searchOptions.set.value;
         self.rarityFilter = self.searchOptions.rarity.value;
         self.minimumCostFilter = self.searchOptions.minimumCost.value;
+        //An array of our current search results.
+        self.currentResults = [];
 
         self.searchByText = function()
         {
@@ -301,7 +303,8 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
          */
         self.initialise = function()
         {
-            self.maxPage = Math.floor((searchFilterFilter(self.collection.cards).length - 1) / self.searchOptions.pageSize);
+            self.currentResults = searchFilterFilter(self.collection.cards);
+            self.maxPage = Math.floor((self.currentResults.length - 1) / self.searchOptions.pageSize);
 
             //Sanity-check our page number.
             if (self.searchOptions.page.value > self.maxPage) self.searchOptions.page.update(self.maxPage);
