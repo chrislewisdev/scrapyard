@@ -4,7 +4,8 @@
             <button class="class-button" 
                 ng-class="{ 'button-primary' : browser.isCurrentClass(class) }" 
                 ng-click="browser.setClass(class)" 
-                ng-repeat="class in browser.collection.classes">
+                ng-repeat="class in browser.collection.classes"
+                ng-disabled="!browser.isClassYieldingCurrentResults(class)">
                 {{class}}
             </button>
         </div>

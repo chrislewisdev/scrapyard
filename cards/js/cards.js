@@ -197,7 +197,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             })
             .otherwise({redirectTo:'/Druid'});
     })
-    .controller('BrowserController', function($routeParams, $location, $rootScope, Collection, ViewOptions, searchFilterFilter, SearchOptions)
+    .controller('BrowserController', function($routeParams, $location, $rootScope, Collection, ViewOptions, classFilterFilter, searchFilterFilter, SearchOptions)
     {
         var self = this;
         
@@ -221,6 +221,9 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         //An array of our current search results.
         self.currentResults = [];
 
+        /**
+         * Search functions for our various search options.
+         */
         self.searchByText = function()
         {
             self.searchOptions.page.update(null);
@@ -261,9 +264,17 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         /**
          * Returns true if the given class is our current class; false otherwise.
          */
-        self.isCurrentClass = function(anyClass)
+        self.isCurrentClass = function(cardClass)
         {
-            return (anyClass == self.searchOptions.class);
+            return (cardClass == self.searchOptions.class);
+        }
+
+        /**
+         * Returns true if our current results include any cards of the given class; false otherwise.
+         */
+        self.isClassYieldingCurrentResults = function(cardClass)
+        {
+            return classFilterFilter(searchFilterFilter(self.collection.cards), cardClass).length > 0;
         }
         
         /**
@@ -303,7 +314,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
          */
         self.initialise = function()
         {
-            self.currentResults = searchFilterFilter(self.collection.cards);
+            self.currentResults = searchFilterFilter(classFilterFilter(self.collection.cards, self.searchOptions.class));
             self.maxPage = Math.floor((self.currentResults.length - 1) / self.searchOptions.pageSize);
 
             //Sanity-check our page number.
@@ -355,6 +366,13 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             return input.slice(start);
         };
     })
+    .filter('classFilter', function(SearchOptions, filterFilter)
+    {
+        return function (input, cardClass)
+        {
+            return filterFilter(input, { 'playerClass' : cardClass })
+        };
+    })
     .filter('searchFilter', function(SearchOptions, Collection, filterFilter)
     {
         return function (input)
@@ -389,8 +407,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             return filterFilter(input,
                                 function(card)
                                 {
-                                    return card.playerClass == SearchOptions.class 
-                                            && card.type != 'Hero'
+                                    return card.type != 'Hero'
                                             && self.matchesSet(card)
                                             && self.matchesText(card)
                                             && (SearchOptions.rarity.value === '' || card.rarity == SearchOptions.rarity.value)

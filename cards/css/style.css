@@ -1,3 +1,10 @@
+button[disabled]
+{
+    background-color:#dedede !important;
+    color:#bbb;
+    border-color:#bbb !important;
+}
+
 .class-button
 {
     width:20%;
