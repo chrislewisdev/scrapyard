@@ -4,6 +4,15 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         var self = this;
         
         self.requestHeaders = {"X-Mashape-Key":"VcJN1iKXCVmshlD4bo5VlLG5so94p1gFd6ojsnRNhvlTDetFLL"};
+
+        self.storageKeys = 
+        {
+            cards: "hearthfinder_cards",
+            lastUpdated: "hearthfinder_lastUpdated",
+            sets: "hearthfinder_sets",
+            standardSets: "hearthfinder_standardSets",
+            rarities: "hearthfinder_rarities"
+        };
         
         //Storage for all currently displayed cards
         self.cards = [];
