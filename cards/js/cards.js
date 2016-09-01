@@ -1,5 +1,47 @@
 angular.module('cards', ['ngRoute', 'ngSanitize'])
-    .service('Collection', function($http, $q)
+    .service('Cache', function()
+    {
+        var self = this;
+
+        self.updateValue = function(key, getter, setter)
+        {
+            getter().then(function(output)
+            {
+                localStorage.setItem(key, JSON.stringify(output));
+                localStorage.setItem(key + "LastUpdated", new Date().getTime());
+                setter(output);
+            });
+        }
+
+        /**
+         * Attempts to fetch a value associated with the given key from the cache. The provided getter/setter methods
+         * must handle retrieving and using the value depending on whether it exists in the cache.
+         * Use longevity to specify how long (in minutes) the cache should last before being refreshed.
+         */
+        self.fetch = function(key, longevity, getter, setter)
+        {
+            var cachedValue = JSON.parse(localStorage.getItem(key));
+
+            //Does the value exist? Check for pesky stringified nulls.
+            if (cachedValue === undefined || cachedValue === null || cachedValue === "undefined" || cachedValue === "null")
+            {
+                self.updateValue(key, getter, setter);
+            }
+            else
+            {
+                setter(cachedValue);
+
+                //Check if the cached value needs updating.
+                var lastUpdated = localStorage.getItem(key + "LastUpdated");
+                var now = new Date().getTime();
+                if (isNaN(lastUpdated) || now - lastUpdated > longevity * 1000)
+                {
+                    self.updateValue(key, getter, setter);
+                }
+            }
+        }
+    })
+    .service('Collection', function($http, $q, Cache)
     {
         var self = this;
         
@@ -7,12 +49,10 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
 
         self.storageKeys = 
         {
-            cards: "hearthfinder_cards",
-            lastUpdated: "hearthfinder_lastUpdated",
-            sets: "hearthfinder_sets",
-            standardSets: "hearthfinder_standardSets",
-            rarities: "hearthfinder_rarities"
+            cards: "cards",
+            info: "info"
         };
+        self.cacheLongevity = 3600;
         
         //Storage for all currently displayed cards
         self.cards = [];
@@ -56,6 +96,12 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
          */
         self.ingestCards = function(newCards, ofClass)
         {
+            //Filter out any existing cards for this class
+            self.cards = self.cards.filter(function (card)
+            {
+                return card.playerClass != ofClass;
+            })
+
             newCards.forEach(function(card)
             {
                 //Neutral cards have no playerClass property, so set it explicitly for consistency
@@ -85,40 +131,55 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         //Retrieve cards separately for each class (so we get results back sooner)
         self.classes.forEach(function(cardClass)
         {
-            $http.get('https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/' + cardClass + '?collectible=1',
-            { headers: self.requestHeaders } )
-            .then(function success(response)
-            {
-                //TODO: Any validation?
-                self.ingestCards(response.data, cardClass);
-                
-                //Resolve our promise for this class
-                self.loadingSignals[cardClass].resolve();
-            },
-            function error(response)
-            {
-                self.loadingSignals[cardClass].reject(response);
-            });
+            Cache.fetch(self.storageKeys.cards + cardClass, self.cacheLongevity, function()
+                {
+                    return $http.get('https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/' + cardClass + '?collectible=1',
+                        { headers: self.requestHeaders } )
+                        .then(function success(response)
+                        {
+                            return response.data;
+                        },
+                        function error(response)
+                        {
+                            self.loadingSignals[cardClass].reject(response);
+                        });
+                },
+                function(cards)
+                {
+                    //TODO: Any validation?
+                    self.ingestCards(cards, cardClass);
+                    
+                    //Resolve our promise for this class
+                    self.loadingSignals[cardClass].resolve();
+                });
         });
 
         //Retrieve any generic collection info we need, e.g. current sets.
-        $http.get('https://omgvamp-hearthstone-v1.p.mashape.com/info/',
-        { headers: self.requestHeaders } )
-        .then(function success(response)
-        {
-            //Include only the sets that aren't internal ones.
-            self.sets = response.data.sets.filter(function(set)
+        Cache.fetch(self.storageKeys.info, self.cacheLongevity, function()
             {
-                return self.internalSets.indexOf(set) < 0;
-            });
+                return $http.get('https://omgvamp-hearthstone-v1.p.mashape.com/info/',
+                    { headers: self.requestHeaders } )
+                    .then(function success(response)
+                    {
+                        return response.data;
+                    });
+            },
+            function(info)
+            {
+                //Include only the sets that aren't internal ones.
+                self.sets = info.sets.filter(function(set)
+                {
+                    return self.internalSets.indexOf(set) < 0;
+                });
 
-            //Update our list of Standard sets
-            self.standardSets = response.data.standard;
+                //Update our list of Standard sets
+                self.standardSets = info.standard;
 
-            //'Free' should refer to Free or Basic. For us, this is all classified as Basic.
-            self.rarities = response.data.qualities;
-            self.rarities[0] = 'Basic';
-        });
+                //'Free' should refer to Free or Basic. For us, this is all classified as Basic.
+                self.rarities = info.qualities;
+                self.rarities[0] = 'Basic';
+            }
+        );
     })
     .service('ViewOptions', function()
     {
