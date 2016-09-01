@@ -23,16 +23,6 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         ];
         //Card set storage.
         self.sets = [];
-        //The API has no notion of Standard/Wild, so we need to hard-code these :(
-        self.standardSets = 
-        [
-            'Basic',
-            'Classic',
-            'Blackrock Mountain',
-            'The Grand Tournament',
-            'The League of Explorers',
-            'Whispers of the Old Gods'
-        ];
         //The Hearthstone API returns a bunch of internal sets along with the 'real' ones. We need to exclude these.
         self.internalSets = 
         [
@@ -46,6 +36,8 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             'Tavern Brawl',
             'Debug'
         ];
+        //Storage for our list of standard sets- retrieved from the API later
+        self.standardSets = [];
         //Storage for all existing card rarities
         self.rarities = [];
 
@@ -110,6 +102,9 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             {
                 return self.internalSets.indexOf(set) < 0;
             });
+
+            //Update our list of Standard sets
+            self.standardSets = response.data.standard;
 
             //'Free' should refer to Free or Basic. For us, this is all classified as Basic.
             self.rarities = response.data.qualities;
@@ -315,6 +310,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         self.initialise = function()
         {
             self.currentResults = searchFilterFilter(classFilterFilter(self.collection.cards, self.searchOptions.class));
+
             self.maxPage = Math.floor((self.currentResults.length - 1) / self.searchOptions.pageSize);
 
             //Sanity-check our page number.

@@ -30,7 +30,7 @@
                 <label>Set</label>
                 <select ng-change="browser.searchBySet()" ng-model="browser.setFilter">
                     <option value="">All</option>
-                    <option value="Standard">Standard</option>
+                    <option ng-if="browser.collection.standardSets.length > 0" value="Standard">Standard</option>
                     <option ng-repeat="set in browser.collection.sets" value="{{set}}">{{set}}</option>
                 </select>
             </div>
