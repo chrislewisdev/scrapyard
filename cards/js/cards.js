@@ -3,6 +3,10 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
     {
         var self = this;
 
+        /**
+         * Performs the actual work of updating local storage with the value retrieved by getter,
+         * then invoking setter with that value.
+         */
         self.updateValue = function(key, getter, setter)
         {
             getter().then(function(output)
@@ -294,6 +298,8 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             self.searchOptions.page.update(null);
 
             self.searchOptions.text.update(self.textFilter);
+
+            self.initialise();
         }
 
         self.searchBySet = function()
@@ -301,6 +307,8 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             self.searchOptions.page.update(null);
 
             self.searchOptions.set.update(self.setFilter);
+
+            self.initialise();
         }
 
         self.searchByRarity = function()
@@ -308,6 +316,8 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             self.searchOptions.page.update(null);
 
             self.searchOptions.rarity.update(self.rarityFilter);
+
+            self.initialise();
         }
 
         self.searchByCost = function()
@@ -315,6 +325,8 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             self.searchOptions.page.update(null);
 
             self.searchOptions.minimumCost.update(self.minimumCostFilter);
+
+            self.initialise();
         }
         
         /**
@@ -382,6 +394,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             self.currentResults = searchFilterFilter(classFilterFilter(self.collection.cards, self.searchOptions.class));
 
             self.maxPage = Math.floor((self.currentResults.length - 1) / self.searchOptions.pageSize);
+            if (self.maxPage < 0) self.maxPage = 0;
 
             //Sanity-check our page number.
             if (self.searchOptions.page.value > self.maxPage) self.searchOptions.page.update(self.maxPage);
@@ -407,13 +420,6 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
                 message: response.data ? response.data.message : 'None Available'
             };
         }
-
-        //Whenever our location updates, refresh.
-        $rootScope.$on('$locationChangeSuccess', function()
-        {
-            //TODO: Reconsider full-init vs validation
-            self.initialise();
-        });
         
         //Make sure we're looking for a valid class before we initialise.
         if (self.collection.classes.indexOf(self.searchOptions.class) === -1)
