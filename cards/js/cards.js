@@ -20,7 +20,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
          */
         self.fetch = function(key, longevity, getter, setter)
         {
-            var cachedValue = JSON.parse(localStorage.getItem(key));
+            var cachedValue = localStorage.getItem(key);
 
             //Does the value exist? Check for pesky stringified nulls.
             if (cachedValue === undefined || cachedValue === null || cachedValue === "undefined" || cachedValue === "null")
@@ -29,7 +29,7 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
             }
             else
             {
-                setter(cachedValue);
+                setter(JSON.parse(cachedValue));
 
                 //Check if the cached value needs updating.
                 var lastUpdated = localStorage.getItem(key + "LastUpdated");
