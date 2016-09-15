@@ -11,43 +11,47 @@
         </div>
     </div>
 
-    <div class="row options display-options">
+    <!--<div class="row options display-options">
         <span>Image Display</span>
         <button ng-click="browser.viewOptions.enableTextOnly()" ng-class="{ 'button-primary' : browser.viewOptions.isTextOnly() }">None</button>
         <button ng-click="browser.viewOptions.enableNormalImages()" ng-class="{ 'button-primary' : browser.viewOptions.isNormalImages() }">Normal</button>
         <button ng-click="browser.viewOptions.enableGoldenImages()" ng-class="{ 'button-primary' : browser.viewOptions.isGoldenImages() }">Golden</button>
-    </div>
+    </div>-->
 
     <div class="row options filter-options">
-        <div class="heading">
-            <span>Filters</span>
-        </div>
-
-        <div class="controls">
+        <div class="fieldset">
+            <label>Filter</label>
             <input type="search" ng-change="browser.searchByText()" ng-model="browser.textFilter" placeholder="Text search..." />
-
-            <div class="fieldset">
-                <label>Set</label>
-                <select ng-change="browser.searchBySet()" ng-model="browser.setFilter">
-                    <option value="">All</option>
-                    <option ng-if="browser.collection.standardSets.length > 0" value="Standard">Standard</option>
-                    <option ng-repeat="set in browser.collection.sets" value="{{set}}">{{set}}</option>
-                </select>
-            </div>
-            
-            <div class="fieldset">
-                <label>Rarity</label>
-                <select ng-change="browser.searchByRarity()" ng-model="browser.rarityFilter">
-                    <option value="">All</option>
-                    <option ng-repeat="rarity in browser.collection.rarities" value="{{rarity}}">{{rarity}}</option>
-                </select>
-            </div>
-
-            <div class="fieldset">
-                <label>Cost: {{browser.minimumCostFilter}}+</label>
-                <input ng-change="browser.searchByCost()" ng-model="browser.minimumCostFilter" type="range" min="0" max="10">
-            </div>
         </div>
+
+        <div class="fieldset">
+            <label>Set</label>
+            <select ng-change="browser.searchBySet()" ng-model="browser.setFilter">
+                <option value="">All</option>
+                <option ng-if="browser.collection.standardSets.length > 0" value="Standard">Standard</option>
+                <option ng-repeat="set in browser.collection.sets" value="{{set}}">{{set}}</option>
+            </select>
+        </div>
+        
+        <div class="fieldset">
+            <label>Rarity</label>
+            <select ng-change="browser.searchByRarity()" ng-model="browser.rarityFilter">
+                <option value="">All</option>
+                <option ng-repeat="rarity in browser.collection.rarities" value="{{rarity}}">{{rarity}}</option>
+            </select>
+        </div>
+
+        <div class="fieldset">
+            <label>Cost: {{browser.minimumCostFilter}}+</label>
+            <input ng-change="browser.searchByCost()" ng-model="browser.minimumCostFilter" type="range" min="0" max="10">
+        </div>
+
+        <div class="fieldset">
+            <label>Images</label>
+            <button ng-click="browser.viewOptions.enableTextOnly()" ng-if="browser.viewOptions.isNormalImages()" class="button-primary">On</button>
+            <button ng-click="browser.viewOptions.enableNormalImages()" ng-if="browser.viewOptions.isTextOnly()">Off</button>
+        </div>
+        
     </div>
     
     <div class="loading-indicator" ng-if="!browser.initialised">
