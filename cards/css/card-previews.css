@@ -29,7 +29,7 @@
     height:30%;
     
     text-align:center;
-    font-size:150%;
+    font-size:1.25vw;
     font-weight:bold;
     
     /* For vertical alignment. */
@@ -135,7 +135,7 @@
  * comes to CSS, this is the only non-JS way to make everything readable.
  */
 
-@media (max-width: 1220px) {
+@media (max-width: 1400px) {
     .card-preview .card-name
     {
         font-size:1.85vw;
