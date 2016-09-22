@@ -1,5 +1,5 @@
 <div class="body container">
-    <div class="row">
+    <div class="row hidden-mobile">
         <div class="twelve columns">
             <button class="class-button" 
                 ng-class="{ 'button-primary' : browser.isCurrentClass(class) }" 
@@ -11,7 +11,21 @@
         </div>
     </div>
 
-    <div class="row options filter-options">
+    <div class="row hidden-desktop">
+        <div class="twelve columns">
+            <select class="class-select" 
+                ng-model="browser.searchOptions.class" 
+                ng-change="browser.setClass(browser.searchOptions.class)" 
+                ng-options="class for class in browser.collection.classes">
+            </select>
+        </div>
+    </div>
+
+    <div class="row filter-toggle hidden-desktop">
+        <button ng-click="browser.viewOptions.toggleShowFilters()" ng-class="{ 'button-primary' : browser.viewOptions.isShowingFilters() }">Show Filters</button>
+    </div>
+
+    <div class="row options filter-options" ng-class="{ 'hidden-mobile' : !browser.viewOptions.isShowingFilters() }">
         <div class="fieldset">
             <label>Filter</label>
             <input type="search" ng-change="browser.searchByText()" ng-model="browser.textFilter" placeholder="Text search..." />
@@ -44,7 +58,6 @@
             <button ng-click="browser.viewOptions.enableTextOnly()" ng-if="browser.viewOptions.isNormalImages()" class="button-primary">On</button>
             <button ng-click="browser.viewOptions.enableNormalImages()" ng-if="browser.viewOptions.isTextOnly()">Off</button>
         </div>
-        
     </div>
     
     <div class="loading-indicator" ng-if="!browser.initialised">

@@ -193,6 +193,8 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         self.displayModes = { none : 0, normal : 1, golden : 2 };
         //Storage for our current display mode.
         self.displayMode = self.displayModes.normal;
+        //To show, or not to show filters
+        self.showFilters = false;
 
         self.enableTextOnly = function()
         {
@@ -219,6 +221,15 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         self.isGoldenImages = function()
         {
             return self.displayMode === self.displayModes.golden;
+        }
+
+        self.toggleShowFilters = function()
+        {
+            self.showFilters = !self.showFilters;
+        }
+        self.isShowingFilters = function()
+        {
+            return self.showFilters;
         }
     })
     .service('SearchOptions', function($routeParams, $location, filterFilter, $rootScope)

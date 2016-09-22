@@ -21,7 +21,7 @@ button[disabled]
 {
     width:10%;
     padding:0;
-    font-size:14px;
+    font-size:13px;
 }
 
 @media (max-width: 900px) { .class-button
@@ -32,6 +32,12 @@ button[disabled]
 {
     width:50%;
 }}
+
+select.class-select
+{
+    width:100%;
+    text-align:center;
+}
 
 .options
 {
@@ -66,6 +72,11 @@ button[disabled]
     {
         width:100%;
     }
+}
+
+.filter-toggle button
+{
+    width:100%;
 }
 
 .filter-options
@@ -198,4 +209,17 @@ button[disabled]
 .previous-page
 {
     float:left;
+}
+
+@media (min-width:650px) {
+    .hidden-desktop
+    {
+        display:none;
+    }
+}
+@media (max-width:650px) {
+    .hidden-mobile
+    {
+        display:none;
+    }
 }
