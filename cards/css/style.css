@@ -211,6 +211,29 @@ select.class-select
     float:left;
 }
 
+@media (max-width:650px) {
+    .pagination
+    {
+        position:fixed;
+        left:0;
+        right:0;
+        bottom:0;
+        width:100%;
+        z-index:110;
+    }
+    .pagination button
+    {
+        background:white;
+        margin-bottom:0;
+        height:1.1em;
+        width:33%;
+    }
+    .collection-view
+    {
+        margin-bottom:60px;
+    }
+}
+
 @media (min-width:650px) {
     .hidden-desktop
     {
