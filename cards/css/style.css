@@ -47,21 +47,6 @@ select.class-select
     padding:15px 5px 5px 5px;
     margin-top:5px;
 }
-.options span
-{
-    display:inline-block;
-    width:24%;
-    height:38px;
-    line-height:38px;
-    font-size:120%;
-    text-align:center;
-}
-@media (max-width: 650px) { 
-    .options span
-    {
-        width:100%;
-    }
-}
 
 .display-options button
 {
@@ -105,6 +90,10 @@ select.class-select
 {
     width:100%;
 }
+span.caret
+{
+    text-align:right;
+}
 @media (max-width: 650px) {
     .filter-options
     {
@@ -120,10 +109,14 @@ select.class-select
         display:inline-block;
         width:24%;
     }
-    .filter-options div.fieldset select, .filter-options div.fieldset input, .filter-options div.fieldset button
+    .filter-options .select-wrapper, .filter-options div.fieldset input, .filter-options div.fieldset button
     {
         display:inline-block;
         width:71%;
+    }
+    .filter-options div.fieldset input.select-dropdown
+    {
+        width:100%;
     }
 }
 
