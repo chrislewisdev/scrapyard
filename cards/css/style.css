@@ -5,9 +5,15 @@
     text-align:center;
 }
 
+.header h1
+{
+    margin:0;
+}
+
 .container
 {
     max-width:none;
+    width:80%;
 }
 
 button[disabled]
@@ -63,6 +69,7 @@ select.class-select
 {
     width:100%;
     z-index:20;
+    margin-bottom:20px;
 }
 
 .filter-options
@@ -109,7 +116,7 @@ span.caret
         display:inline-block;
         width:24%;
     }
-    .filter-options .select-wrapper, .filter-options div.fieldset input, .filter-options div.fieldset button
+    .filter-options .select-wrapper, .filter-options div.fieldset input[type=search], .filter-options div.fieldset button, p.range-field
     {
         display:inline-block;
         width:71%;
