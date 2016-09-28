@@ -440,6 +440,15 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
         else
         {
             self.collection.loadingSignals[self.searchOptions.class].promise.then(self.initialise, self.onError);
+
+            angular.element(document).ready(function()
+            {
+                $('select').material_select();
+                $('select').change(function (event)
+                {
+                    angular.element(event.target).triggerHandler("change");
+                });
+            });
         }
     })
     .filter('startFrom', function()

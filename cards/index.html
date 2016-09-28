@@ -10,10 +10,8 @@
         <link rel="shortcut icon" type="image/png" href="../_images/favicon.png">
         <link rel="shortcut icon" type="image/png" href="http://scrap.chrislewisdev.com/_images/favicon.png">
         
-        <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-        <link rel="stylesheet" href="../_css/skeleton/normalize.css">
-        <link rel="stylesheet" href="../_css/skeleton/skeleton.css">
-        <link rel="stylesheet" href="../_css/style.css">
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link type="text/css" rel="stylesheet" href="./materialize/css/materialize.min.css"  media="screen,projection"/>
         <link rel="stylesheet" href="./css/style.css">
         <link rel="stylesheet" href="./css/card-previews.css">
         
@@ -21,12 +19,17 @@
         <script src="../_js/angular-route.min.js"></script>
         <script src="../_js/angular-sanitize.js"></script>
         <script src="./js/cards.js"></script>
+
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
     <body>
+        
+
         <div class="header">
             <div class="container">
                 <div class="row">
-                    <div class="twelve columns">
+                    <div class="col s12">
                         <h1>Hearthfinder</h1>
                     </div>
                 </div>
@@ -34,5 +37,12 @@
         </div>
         
         <div ng-view></div>
+
+        <!-- Materialize CSS includes -->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="./materialize/js/materialize.min.js"></script>
+        <script>
+            
+        </script>
     </body>
 </html>

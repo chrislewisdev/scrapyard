@@ -77,6 +77,7 @@ select.class-select
 .filter-toggle button
 {
     width:100%;
+    z-index:20;
 }
 
 .filter-options
@@ -138,7 +139,7 @@ select.class-select
     font-size:50%;
 }
 
-.card
+.card-single
 {
     display:inline-block;
     width:16.66%;
@@ -149,7 +150,7 @@ select.class-select
     /*All the card images have whitespace around the top... let's squish that down. */
     margin-top:-40px;
 }
-.card::after
+.card-single::after
 {
     /* Confused? 151% = ratio of the card image size, a.k.a. 307 * 465. 
      * This makes our card div match the aspect ratio even when the image hasn't loaded yet, 
@@ -160,22 +161,22 @@ select.class-select
     content:'';
 }
 
-@media (max-width: 1400px) { .card
+@media (max-width: 1400px) { .card-single
 {
     width:25%;
 }}
 /* 3 columns on smaller screens*/
-@media (max-width: 950px) { .card
+@media (max-width: 950px) { .card-single
 {
     width:33%;
 }}
 /* 2 columns on phone screens */
-@media (max-width: 550px) { .card
+@media (max-width: 550px) { .card-single
 {
     width:50%;
 }}
 
-.card img
+.card-single img
 {
     /* Absolute positioning required to prevent the card size interfering with our fixed-aspect div size. */
     position:absolute;
@@ -188,7 +189,7 @@ select.class-select
     height:auto;
     
     /* Make sure it sits above the card preview once loaded. */
-    z-index:100;
+    z-index:10;
 }
 
 .card-area
@@ -219,11 +220,10 @@ select.class-select
         right:0;
         bottom:0;
         width:100%;
-        z-index:110;
+        z-index:20;
     }
     .pagination button
     {
-        background:white;
         margin-bottom:0;
         height:1.1em;
         width:33%;

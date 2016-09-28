@@ -1,7 +1,7 @@
 <div class="body container">
     <div class="row hidden-mobile">
-        <div class="twelve columns">
-            <button class="class-button" 
+        <div class="col s12">
+            <button class="btn class-button" 
                 ng-class="{ 'button-primary' : browser.isCurrentClass(class) }" 
                 ng-click="browser.setClass(class)" 
                 ng-repeat="class in browser.collection.classes"
@@ -12,8 +12,8 @@
     </div>
 
     <div class="row hidden-desktop">
-        <div class="twelve columns">
-            <select class="class-select" 
+        <div class="input-field col s12">
+            <select id="class-select" class="class-select" 
                 ng-model="browser.searchOptions.class" 
                 ng-change="browser.setClass(browser.searchOptions.class)" 
                 ng-options="class for class in browser.collection.classes">
@@ -22,7 +22,7 @@
     </div>
 
     <div class="row filter-toggle hidden-desktop">
-        <button ng-click="browser.viewOptions.toggleShowFilters()" ng-class="{ 'button-primary' : browser.viewOptions.isShowingFilters() }">Show Filters</button>
+        <button class="btn" ng-click="browser.viewOptions.toggleShowFilters()" ng-class="{ 'button-primary' : browser.viewOptions.isShowingFilters() }">Show Filters</button>
     </div>
 
     <div class="row options filter-options" ng-class="{ 'hidden-mobile' : !browser.viewOptions.isShowingFilters() }">
@@ -55,8 +55,8 @@
 
         <div class="fieldset">
             <label>Images</label>
-            <button ng-click="browser.viewOptions.enableTextOnly()" ng-if="browser.viewOptions.isNormalImages()" class="button-primary">On</button>
-            <button ng-click="browser.viewOptions.enableNormalImages()" ng-if="browser.viewOptions.isTextOnly()">Off</button>
+            <button ng-click="browser.viewOptions.enableTextOnly()" ng-if="browser.viewOptions.isNormalImages()" class="btn button-primary">On</button>
+            <button ng-click="browser.viewOptions.enableNormalImages()" ng-if="browser.viewOptions.isTextOnly()" class="btn">Off</button>
         </div>
     </div>
     
@@ -87,8 +87,8 @@
     
     <div class="collection-view" ng-if="browser.initialised">
         <div class="row card-area">
-            <div class="twelve columns">
-                <div class="card" ng-repeat="card in browser.currentResults | 
+            <div class="col s12">
+                <div class="card-single" ng-repeat="card in browser.currentResults | 
                                                 startFrom: browser.searchOptions.page.value * browser.searchOptions.pageSize |
                                                 limitTo: browser.searchOptions.pageSize">
                     <div class="card-preview">
@@ -110,7 +110,7 @@
         </div>
         
         <div class="pagination">
-            <button class="previous-page" ng-if="browser.canPageBackwards()" ng-click="browser.previousPage()">&lt;</button><button class="next-page" ng-if="browser.canPageForwards()" ng-click="browser.nextPage()">&gt;</button>
+            <button class="btn previous-page" ng-if="browser.canPageBackwards()" ng-click="browser.previousPage()">&lt;</button><button class="btn next-page" ng-if="browser.canPageForwards()" ng-click="browser.nextPage()">&gt;</button>
         </div>
     </div>
 
