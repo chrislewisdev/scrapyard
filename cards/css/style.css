@@ -1,8 +1,16 @@
+body
+{
+    background:#F5F5F5;
+    color:#212121;
+}
+
 .header
 {
     padding-top:1em;
-    margin-bottom:1em;
+    padding-bottom:1em;
     text-align:center;
+    /*background:#795548;*/
+    color:#FFFFFF;
 }
 
 .header h1
@@ -16,17 +24,51 @@
     width:80%;
 }
 
+.class-navigation
+{
+    box-shadow: inset 0px 5px 20px 0px rgba(0,0,0,0.17);
+    padding-top:1em;
+    padding-bottom:1em;
+}
+.class-navigation .row
+{
+    margin-bottom:0;
+}
+
+.filters
+{
+    box-shadow: inset 0px 0px 20px 0px rgba(0,0,0,0.25);
+    padding-top:1em;
+    padding-bottom:1em;
+    color:#FFFFFF;
+}
+
 button[disabled]
 {
     background-color:#dedede !important;
     color:#bbb;
     border-color:#bbb !important;
 }
+.btn
+{
+    background:#80d8ff;
+    color:#212121;
+}
+.btn:hover, .btn:focus
+{
+    background:#0288d1;
+}
+.button-primary
+{
+    background:#03a9f4;
+    color:#FFFFFF;
+}
 
 .class-button
 {
-    width:10%;
-    padding:0;
+    width:9%;
+    margin-left:.5%;
+    margin-right:.5%;
     font-size:13px;
 }
 
@@ -45,15 +87,6 @@ select.class-select
     text-align:center;
 }
 
-.options
-{
-    border:1px solid grey;
-    border-radius:4px;
-
-    padding:15px 5px 5px 5px;
-    margin-top:5px;
-}
-
 .display-options button
 {
     width:24%;
@@ -69,7 +102,7 @@ select.class-select
 {
     width:100%;
     z-index:20;
-    margin-bottom:20px;
+    /*margin-bottom:20px;*/
 }
 
 .filter-options
@@ -101,6 +134,10 @@ span.caret
 {
     text-align:right;
 }
+.fieldset input, .fieldset input.select-dropdown, .fieldset p.range-field
+{
+    margin-bottom:5px;
+}
 @media (max-width: 650px) {
     .filter-options
     {
@@ -124,6 +161,10 @@ span.caret
     .filter-options div.fieldset input.select-dropdown
     {
         width:100%;
+    }
+    .fieldset input, .fieldset input.select-dropdown, .fieldset p.range-field
+    {
+        margin-bottom:10px;
     }
 }
 

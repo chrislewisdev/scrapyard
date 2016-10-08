@@ -1,117 +1,126 @@
-<div class="body container">
-    <div class="row hidden-mobile">
-        <div class="col s12">
-            <button class="btn class-button" 
-                ng-class="{ 'button-primary' : browser.isCurrentClass(class) }" 
-                ng-click="browser.setClass(class)" 
-                ng-repeat="class in browser.collection.classes"
-                ng-disabled="!browser.isClassYieldingCurrentResults(class)">
-                {{class}}
-            </button>
-        </div>
-    </div>
+<div class="body">
+    <div class="class-navigation blue-grey darken-1">
+        <div class="container">
+            <div class="row hidden-mobile">
+                <div class="col s12">
+                    <button class="btn class-button" 
+                        ng-class="{ 'button-primary' : browser.isCurrentClass(class) }" 
+                        ng-click="browser.setClass(class)" 
+                        ng-repeat="class in browser.collection.classes"
+                        ng-disabled="!browser.isClassYieldingCurrentResults(class)">
+                        {{class}}
+                    </button>
+                </div>
+            </div>
 
-    <div class="row hidden-desktop">
-        <div class="input-field col s12">
-            <select id="class-select" class="class-select" 
-                ng-model="browser.searchOptions.class" 
-                ng-change="browser.setClass(browser.searchOptions.class)" 
-                ng-options="class for class in browser.collection.classes">
-            </select>
-        </div>
-    </div>
-
-    <div class="row filter-toggle hidden-desktop">
-        <button class="btn" ng-click="browser.viewOptions.toggleShowFilters()" ng-class="{ 'button-primary' : browser.viewOptions.isShowingFilters() }">Show Filters</button>
-    </div>
-
-    <div class="row options filter-options" ng-class="{ 'hidden-mobile' : !browser.viewOptions.isShowingFilters() }">
-        <div class="fieldset">
-            <label>Filter</label>
-            <input type="search" ng-change="browser.searchByText()" ng-model="browser.textFilter" placeholder="Text search..." />
-        </div>
-
-        <div class="fieldset">
-            <label>Set</label>
-            <select ng-change="browser.searchBySet()" ng-model="browser.setFilter">
-                <option value="">All</option>
-                <option ng-if="browser.collection.standardSets.length > 0" value="Standard">Standard</option>
-                <option ng-repeat="set in browser.collection.sets" value="{{set}}">{{set}}</option>
-            </select>
-        </div>
-        
-        <div class="fieldset">
-            <label>Rarity</label>
-            <select ng-change="browser.searchByRarity()" ng-model="browser.rarityFilter">
-                <option value="">All</option>
-                <option ng-repeat="rarity in browser.collection.rarities" value="{{rarity}}">{{rarity}}</option>
-            </select>
-        </div>
-
-        <div class="fieldset">
-            <label>Cost: {{browser.minimumCostFilter}}+</label>
-            <p class="range-field"><input ng-change="browser.searchByCost()" ng-model="browser.minimumCostFilter" type="range" min="0" max="10"></p>
-        </div>
-
-        <div class="fieldset">
-            <label>Images</label>
-            <button ng-click="browser.viewOptions.enableTextOnly()" ng-if="browser.viewOptions.isNormalImages()" class="btn button-primary">On</button>
-            <button ng-click="browser.viewOptions.enableNormalImages()" ng-if="browser.viewOptions.isTextOnly()" class="btn">Off</button>
-        </div>
-    </div>
-    
-    <div class="loading-indicator" ng-if="!browser.initialised">
-        Loading...
-    </div>
-    
-    <div class="error-message" ng-if="browser.initialised && browser.error">
-        <p>Sorry! There was a problem loading all the cards. </p>
-        
-        <p>Try again later or tweet at <a href="https://twitter.com/cl_dev">@cl_dev</a> to let me know something's wrong!</p>
-        
-        <p class="error-info">
-            <strong>Response</strong>: {{browser.errorInfo.statusText}}<br />
-            <strong>Error Message</strong>: {{browser.errorInfo.message}}
-        </p>
-    </div>
-
-    <div class="error-message" ng-if="browser.initialised && browser.currentResults.length <= 0">
-        Sorry!<br/>
-        There are no 
-        <span>{{browser.rarityFilter}}</span> <span>{{browser.searchOptions.class}}</span> cards
-        <span ng-if="browser.setFilter != ''"><br/> in {{browser.setFilter}} </span>
-        <span ng-if="browser.textFilter != ''"><br/> with text '{{browser.textFilter}}' </span>
-        <span ng-if="browser.minimumCostFilter > 0"><br />that cost {{browser.minimumCostFilter}}+</span>
-        :(
-    </div>
-    
-    <div class="collection-view" ng-if="browser.initialised">
-        <div class="row card-area">
-            <div class="col s12">
-                <div class="card-single" ng-repeat="card in browser.currentResults | 
-                                                startFrom: browser.searchOptions.page.value * browser.searchOptions.pageSize |
-                                                limitTo: browser.searchOptions.pageSize">
-                    <div class="card-preview">
-                        <div class="card-name"><span>{{card.name}}</span></div>
-                        <div class="card-rarity {{card.rarity}}">{{card.rarity}}</div>
-                        <div class="card-cost">{{card.cost}}</div>
-                        <div class="card-attack" ng-if="card.type == 'Minion' || card.type == 'Weapon'">{{card.attack}}</div>
-                        <div class="card-health" ng-if="card.type == 'Minion'">{{card.health}}</div>
-                        <div class="card-health" ng-if="card.type == 'Weapon'">{{card.durability}}</div>
-                        <div class="card-text"><span ng-bind-html="card.text"></span></div>
-                        <div class="card-race">{{card.race}}</div>
-                        <div class="card-type">{{card.type}}</div>
-                    </div>
-                    
-                    <img ng-src="{{card.img}}" ng-if="browser.viewOptions.isNormalImages()" />
-                    <img ng-src="{{card.imgGold}}" ng-if="browser.viewOptions.isGoldenImages()" />
+            <div class="row hidden-desktop">
+                <div class="input-field col s12">
+                    <select id="class-select" class="class-select" 
+                        ng-model="browser.searchOptions.class" 
+                        ng-change="browser.setClass(browser.searchOptions.class)" 
+                        ng-options="class for class in browser.collection.classes">
+                    </select>
                 </div>
             </div>
         </div>
-        
-        <div class="pagination">
-            <button class="btn previous-page" ng-if="browser.canPageBackwards()" ng-click="browser.previousPage()">&lt;</button><button class="btn next-page" ng-if="browser.canPageForwards()" ng-click="browser.nextPage()">&gt;</button>
+    </div>
+
+    <div class="filters blue-grey darken-2">
+        <div class="container">
+            <div class="filter-toggle hidden-desktop">
+                <button class="btn" ng-click="browser.viewOptions.toggleShowFilters()" ng-class="{ 'button-primary' : browser.viewOptions.isShowingFilters() }">Show Filters</button>
+            </div>
+
+            <div class="options filter-options" ng-class="{ 'hidden-mobile' : !browser.viewOptions.isShowingFilters() }">
+                <div class="fieldset">
+                    <label>Filter</label>
+                    <input type="search" ng-change="browser.searchByText()" ng-model="browser.textFilter" placeholder="Text search..." />
+                </div>
+
+                <div class="fieldset">
+                    <label>Set</label>
+                    <select ng-change="browser.searchBySet()" ng-model="browser.setFilter">
+                        <option value="">All</option>
+                        <option ng-if="browser.collection.standardSets.length > 0" value="Standard">Standard</option>
+                        <option ng-repeat="set in browser.collection.sets" value="{{set}}">{{set}}</option>
+                    </select>
+                </div>
+                
+                <div class="fieldset">
+                    <label>Rarity</label>
+                    <select ng-change="browser.searchByRarity()" ng-model="browser.rarityFilter">
+                        <option value="">All</option>
+                        <option ng-repeat="rarity in browser.collection.rarities" value="{{rarity}}">{{rarity}}</option>
+                    </select>
+                </div>
+
+                <div class="fieldset">
+                    <label>Cost: {{browser.minimumCostFilter}}+</label>
+                    <p class="range-field"><input ng-change="browser.searchByCost()" ng-model="browser.minimumCostFilter" type="range" min="0" max="10"></p>
+                </div>
+
+                <div class="fieldset">
+                    <label>Images</label>
+                    <button ng-click="browser.viewOptions.enableTextOnly()" ng-if="browser.viewOptions.isNormalImages()" class="btn button-primary">On</button>
+                    <button ng-click="browser.viewOptions.enableNormalImages()" ng-if="browser.viewOptions.isTextOnly()" class="btn">Off</button>
+                </div>
+            </div>
         </div>
     </div>
 
+    <div class="main-view">
+        <div class="container">
+            <div class="loading-indicator" ng-if="!browser.initialised">
+                Loading...
+            </div>
+            
+            <div class="error-message" ng-if="browser.initialised && browser.error">
+                <p>Sorry! There was a problem loading all the cards. </p>
+                
+                <p>Try again later or tweet at <a href="https://twitter.com/cl_dev">@cl_dev</a> to let me know something's wrong!</p>
+                
+                <p class="error-info">
+                    <strong>Response</strong>: {{browser.errorInfo.statusText}}<br />
+                    <strong>Error Message</strong>: {{browser.errorInfo.message}}
+                </p>
+            </div>
+
+            <div class="error-message" ng-if="browser.initialised && browser.currentResults.length <= 0">
+                Sorry!<br/>
+                There are no 
+                <span>{{browser.rarityFilter}}</span> <span>{{browser.searchOptions.class}}</span> cards
+                <span ng-if="browser.setFilter != ''"><br/> in {{browser.setFilter}} </span>
+                <span ng-if="browser.textFilter != ''"><br/> with text '{{browser.textFilter}}' </span>
+                <span ng-if="browser.minimumCostFilter > 0"><br />that cost {{browser.minimumCostFilter}}+</span>
+                :(
+            </div>
+            
+            <div class="collection-view" ng-if="browser.initialised">
+                <div class="card-area">
+                    <div class="card-single" ng-repeat="card in browser.currentResults | 
+                                                    startFrom: browser.searchOptions.page.value * browser.searchOptions.pageSize |
+                                                    limitTo: browser.searchOptions.pageSize">
+                        <div class="card-preview">
+                            <div class="card-name"><span>{{card.name}}</span></div>
+                            <div class="card-rarity {{card.rarity}}">{{card.rarity}}</div>
+                            <div class="card-cost">{{card.cost}}</div>
+                            <div class="card-attack" ng-if="card.type == 'Minion' || card.type == 'Weapon'">{{card.attack}}</div>
+                            <div class="card-health" ng-if="card.type == 'Minion'">{{card.health}}</div>
+                            <div class="card-health" ng-if="card.type == 'Weapon'">{{card.durability}}</div>
+                            <div class="card-text"><span ng-bind-html="card.text"></span></div>
+                            <div class="card-race">{{card.race}}</div>
+                            <div class="card-type">{{card.type}}</div>
+                        </div>
+                        
+                        <img ng-src="{{card.img}}" ng-if="browser.viewOptions.isNormalImages()" />
+                        <img ng-src="{{card.imgGold}}" ng-if="browser.viewOptions.isGoldenImages()" />
+                    </div>
+                </div>
+                
+                <div class="pagination">
+                    <button class="btn previous-page" ng-if="browser.canPageBackwards()" ng-click="browser.previousPage()">&lt;</button><button class="btn next-page" ng-if="browser.canPageForwards()" ng-click="browser.nextPage()">&gt;</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
