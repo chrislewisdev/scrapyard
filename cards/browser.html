@@ -14,13 +14,12 @@
             </div>
 
             <div class="row hidden-desktop">
-                <div class="input-field col s12">
-                    <select id="class-select" class="class-select" 
-                        ng-model="browser.searchOptions.class" 
-                        ng-change="browser.setClass(browser.searchOptions.class)" 
-                        ng-options="class for class in browser.collection.classes">
-                    </select>
-                </div>
+                <button class="dropdown-button btn button-primary" data-activates="class-select-dropdown">{{browser.searchOptions.class}}</button>
+                <ul id="class-select-dropdown" class="dropdown-content">
+                    <li ng-repeat="class in browser.collection.classes">
+                        <a ng-click="browser.setClass(class)">{{class}}</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

@@ -448,6 +448,8 @@ angular.module('cards', ['ngRoute', 'ngSanitize'])
                 {
                     angular.element(event.target).triggerHandler("change");
                 });
+
+                $('.dropdown-button').dropdown();
             });
         }
     })
