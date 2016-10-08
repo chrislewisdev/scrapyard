@@ -1,7 +1,7 @@
 <div class="body">
     <div class="class-navigation blue-grey darken-1">
         <div class="container">
-            <div class="row hidden-mobile">
+            <div class="row class-navigation-desktop">
                 <div class="col s12">
                     <button class="btn class-button" 
                         ng-class="{ 'button-primary' : browser.isCurrentClass(class) }" 
@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <div class="row hidden-desktop">
+            <div class="row class-navigation-mobile">
                 <button class="dropdown-button btn button-primary" data-activates="class-select-dropdown">{{browser.searchOptions.class}}</button>
                 <ul id="class-select-dropdown" class="dropdown-content">
                     <li ng-repeat="class in browser.collection.classes">

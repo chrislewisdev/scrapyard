@@ -9,19 +9,25 @@ body
     padding-top:1em;
     padding-bottom:1em;
     text-align:center;
-    /*background:#795548;*/
     color:#FFFFFF;
 }
 
 .header h1
 {
     margin:0;
+    font-size:3.5rem;    
 }
 
 .container
 {
     max-width:none;
     width:80%;
+}
+@media (max-width:900px) {
+    .container
+    {
+        width:85%;
+    }
 }
 
 .class-navigation
@@ -51,16 +57,17 @@ button[disabled]
 }
 .btn
 {
-    background:#80d8ff;
+    background:#00b0ff;
     color:#212121;
+    padding:0;
 }
-.btn:hover, .btn:focus
+.btn:hover
 {
-    background:#0288d1;
+    background:#40c4ff;
 }
-.button-primary
+.button-primary, .btn:focus
 {
-    background:#03a9f4;
+    background:#0091ea;
     color:#FFFFFF;
 }
 
@@ -72,14 +79,20 @@ button[disabled]
     font-size:13px;
 }
 
-@media (max-width: 900px) { .class-button
+.class-navigation-mobile
 {
-    width:20%;
-}}
-@media (max-width: 600px) { .class-button
-{
-    width:50%;
-}}
+    display:none;
+}
+@media (max-width: 900px) { 
+    .class-navigation-mobile
+    {
+        display:block;
+    }
+    .class-navigation-desktop
+    {
+        display:none;
+    }
+}
 
 .class-navigation .dropdown-button
 {
@@ -147,6 +160,7 @@ span.caret
     .filter-options
     {
         display:block;
+        margin-top:.5em;
     }
     .filter-options div.fieldset
     {
