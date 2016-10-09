@@ -14,9 +14,9 @@
             </div>
 
             <div class="row class-navigation-mobile">
-                <button class="dropdown-button btn button-primary" data-activates="class-select-dropdown">{{browser.searchOptions.class}}</button>
+                <button class="dropdown-button btn button-primary" data-activates="class-select-dropdown">{{browser.searchOptions.class}} &#9660;</button>
                 <ul id="class-select-dropdown" class="dropdown-content">
-                    <li ng-repeat="class in browser.collection.classes">
+                    <li ng-repeat="class in browser.collection.classes" ng-class="{ 'current-class' : browser.isCurrentClass(class) }">
                         <a ng-click="browser.setClass(class)">{{class}}</a>
                     </li>
                 </ul>
@@ -117,7 +117,7 @@
                 </div>
                 
                 <div class="pagination">
-                    <button class="btn previous-page" ng-if="browser.canPageBackwards()" ng-click="browser.previousPage()">&lt;</button><button class="btn next-page" ng-if="browser.canPageForwards()" ng-click="browser.nextPage()">&gt;</button>
+                    <button class="btn previous-page valign-wrapper" ng-if="browser.canPageBackwards()" ng-click="browser.previousPage()"><i class="material-icons valign">chevron_left</i></button><button class="btn next-page valign-wrapper" ng-if="browser.canPageForwards()" ng-click="browser.nextPage()"><i class="material-icons valign">chevron_right</i></button>
                 </div>
             </div>
         </div>
